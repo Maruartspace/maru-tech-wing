@@ -61,11 +61,11 @@ header.scrolled{border-color:var(--border);}
 .hero-cta{display:flex; gap:14px; flex-wrap:wrap;}
 
 /* MARQUEE */
-.marquee{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--ink); color:var(--bg); overflow:hidden; padding:16px 0; margin-top:70px;}
+.marquee{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--ink); color:var(--bg); overflow:hidden; padding:16px 0; margin-top:70px; margin-left:calc(-50vw + 50%); margin-right:calc(-50vw + 50%); width:100vw;}
 .marquee-track{display:flex; white-space:nowrap; width:max-content; animation:scroll 26s linear infinite;}
 .marquee-track span{font-family:var(--fd); font-weight:700; font-size:15px; letter-spacing:.08em; text-transform:uppercase; padding:0 26px; display:inline-flex; align-items:center;}
 .marquee-track .s{color:var(--accent);}
-@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}}
 
 /* SECTION */
 section{padding:96px 0;}
