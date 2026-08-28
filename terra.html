@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TERRA — Single-Origin Coffee Roastery</title>
+<meta name="description" content="TERRA — a single-origin coffee roastery. Slow-roasted, hand-brewed, traced from seed to cup." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#1B140F; --paper:#F6EFE3; --paper-2:#EFE4D2;
+    --terra:#C2662D; --terra-deep:#8C471C;
+    --mut:#8A7A68; --mut-2:#4A3D30;
+    --border:rgba(27,20,15,.12);
+    --on-dark:#F6EFE3; --on-dark-mut:#B8A692; --dark-card:#241A13; --dark-border:#3A2C20;
+    --fd:'Instrument Serif',Georgia,serif; --fb:'Inter',system-ui,sans-serif; --fm:'JetBrains Mono',monospace;
+    --r:18px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--fb); font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1160px; margin:0 auto; padding:0 28px;}
+  h1,h2,h3{font-family:var(--fd); font-weight:400; letter-spacing:-.01em; line-height:1.04; margin:0;}
+  a{color:inherit; text-decoration:none;}
+  .eyebrow{font-family:var(--fm); font-weight:500; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--terra);}
+  .eyebrow::before{content:"( "; } .eyebrow::after{content:" )"; }
+  .btn{display:inline-flex; align-items:center; gap:9px; font-family:var(--fb); font-weight:600; font-size:15px; padding:15px 30px; border-radius:40px; cursor:pointer; transition:transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease; border:1.5px solid transparent;}
+  .btn-fill{background:var(--terra); color:#fff;}
+  .btn-fill:hover{transform:translateY(-2px); background:var(--terra-deep);}
+  .btn-ghost{border-color:var(--border); color:var(--ink);}
+  .btn-ghost:hover{transform:translateY(-2px); border-color:var(--terra); color:var(--terra);}
+  .btn-cream{background:var(--paper); color:var(--ink);}
+  .btn-cream:hover{transform:translateY(-2px);}
+
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1; transform:none;}
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important;} .reveal{opacity:1; transform:none; transition:none;} }
+
+  /* HEADER */
+  header{position:sticky; top:0; z-index:50; background:rgba(246,239,227,.86); backdrop-filter:blur(10px); border-bottom:1px solid var(--border);}
+  .nav{display:flex; align-items:center; justify-content:space-between; height:78px;}
+  .brand{font-family:var(--fd); font-size:24px; letter-spacing:.06em;}
+  .brand b{color:var(--terra); font-style:italic;}
+  .nav-links{display:flex; gap:34px; font-family:var(--fm); font-size:13px; letter-spacing:.06em; text-transform:uppercase;}
+  .nav-links a{opacity:.75; transition:opacity .15s;}
+  .nav-links a:hover{opacity:1; color:var(--terra);}
+  .burger{display:none;}
+  @media(max-width:760px){ .nav-links{display:none;} }
+
+  /* HERO */
+  .hero{position:relative; min-height:92vh; display:flex; align-items:flex-end; color:var(--on-dark); overflow:hidden;}
+  .hero-bg{position:absolute; inset:0; background:url('terra-assets/hero-beans.webp') center 62%/cover no-repeat;}
+  .hero-scrim{position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,14,10,.35) 0%, rgba(20,14,10,.55) 55%, rgba(18,12,8,.92) 100%);}
+  .hero-in{position:relative; z-index:2; padding:120px 0 72px;}
+  .hero .eyebrow{color:#E7B98A;}
+  .hero h1{font-size:clamp(42px,7vw,84px); font-weight:400; max-width:14ch; margin:18px 0 22px; font-style:italic;}
+  .hero p{max-width:46ch; color:var(--on-dark-mut); font-size:18px; margin:0 0 34px;}
+  .hero-cta{display:flex; gap:14px; flex-wrap:wrap;}
+
+  .steam{position:absolute; width:3px; border-radius:3px; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.55) 40%, rgba(255,255,255,0) 100%); filter:blur(2px); animation:rise 5.5s ease-in infinite; pointer-events:none;}
+  @keyframes rise{ 0%{ transform:translateY(0) scaleX(1); opacity:0; } 15%{ opacity:.8; } 100%{ transform:translateY(-140px) scaleX(2.2); opacity:0; } }
+
+  /* SECTION shared */
+  section{padding:120px 0;}
+  .sec-head{max-width:640px; margin:0 auto 64px; text-align:center;}
+  .sec-head h2{font-size:clamp(32px,5vw,50px); margin:16px 0;}
+  .sec-head p{color:var(--mut); font-size:17px;}
+
+  /* STORY (seed to cup) */
+  .story{background:var(--paper-2);}
+  .stage{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; margin-bottom:110px;}
+  .stage:last-child{margin-bottom:0;}
+  .stage:nth-child(even) .stage-media{order:2;}
+  .stage-media{position:relative; border-radius:var(--r); overflow:hidden; aspect-ratio:1/1;}
+  .stage-media img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+  .stage-media:hover img{transform:scale(1.05);}
+  .stage-no{font-family:var(--fm); font-size:13px; letter-spacing:.14em; color:var(--terra); margin-bottom:10px;}
+  .stage h3{font-size:clamp(28px,4vw,40px); margin-bottom:16px;}
+  .stage p{color:var(--mut-2); font-size:16.5px; max-width:42ch;}
+  @media(max-width:820px){ .stage{grid-template-columns:1fr; gap:26px;} .stage:nth-child(even) .stage-media{order:0;} .stage{margin-bottom:64px;} }
+
+  /* MENU */
+  .menu{background:var(--ink); color:var(--on-dark);}
+  .menu .sec-head p{color:var(--on-dark-mut);}
+  .menu-list{max-width:720px; margin:0 auto;}
+  .menu-row{display:flex; justify-content:space-between; gap:24px; padding:26px 0; border-bottom:1px solid var(--dark-border);}
+  .menu-row:last-child{border-bottom:none;}
+  .menu-name{font-family:var(--fd); font-size:24px; font-style:italic;}
+  .menu-notes{color:var(--on-dark-mut); font-size:14.5px; margin-top:6px; max-width:44ch;}
+  .menu-price{font-family:var(--fm); font-size:15px; color:var(--terra); white-space:nowrap; padding-top:4px;}
+
+  /* VISIT */
+  .visit{display:grid; grid-template-columns:1fr 1fr; gap:0; align-items:stretch;}
+  .visit-media{position:relative; min-height:520px;}
+  .visit-media img{width:100%; height:100%; object-fit:cover; position:absolute; inset:0;}
+  .visit-info{display:flex; align-items:center; padding:80px 60px;}
+  .visit-info h2{font-size:clamp(30px,4vw,44px); margin-bottom:22px;}
+  .visit-row{display:flex; gap:14px; padding:16px 0; border-top:1px solid var(--border);}
+  .visit-row:last-of-type{border-bottom:1px solid var(--border);}
+  .visit-row .k{font-family:var(--fm); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--terra); width:110px; flex:none; padding-top:2px;}
+  .visit-row .v{color:var(--mut-2);}
+  @media(max-width:820px){ .visit{grid-template-columns:1fr;} .visit-media{min-height:340px;} .visit-info{padding:56px 28px;} }
+
+  /* CONTACT / FOOTER */
+  .contact{text-align:center;}
+  .contact h2{font-size:clamp(34px,6vw,58px); font-style:italic; margin-bottom:18px;}
+  .contact p{color:var(--mut); max-width:44ch; margin:0 auto 34px;}
+  footer{background:var(--ink); color:var(--on-dark-mut); padding:44px 0;}
+  .foot-in{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; font-size:14px;}
+  .foot-in a{opacity:.85;} .foot-in a:hover{opacity:1; color:var(--terra);}
+  .foot-links{display:flex; gap:22px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="brand">TE<b>RR</b>A</a>
+    <nav class="nav-links">
+      <a href="#story">Story</a>
+      <a href="#menu">Menu</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a href="#visit" class="btn btn-fill" style="padding:11px 22px; font-size:13px;">Find Us</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-scrim"></div>
+    <div class="steam" style="left:22%; bottom:38%; animation-delay:0s;"></div>
+    <div class="steam" style="left:47%; bottom:44%; animation-delay:1.8s;"></div>
+    <div class="steam" style="left:68%; bottom:36%; animation-delay:3.2s;"></div>
+    <div class="wrap hero-in reveal">
+      <span class="eyebrow">Single-Origin · Small Batch</span>
+      <h1>Coffee you can smell from the doorway.</h1>
+      <p>Slow-roasted in small batches, brewed the old way. TERRA is built around one idea: the aroma should reach you before the first sip does.</p>
+      <div class="hero-cta">
+        <a href="#story" class="btn btn-fill">See the journey</a>
+        <a href="#menu" class="btn btn-ghost" style="border-color:rgba(246,239,227,.35); color:var(--on-dark);">View menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY: SEED TO CUP -->
+  <section class="story" id="story">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">The Journey</span>
+        <h2>From seed to cup, nothing hidden</h2>
+        <p>Five moments, one bean. Every stage changes its aroma — we roast, grind and pour to protect exactly that.</p>
+      </div>
+
+      <div class="stage reveal">
+        <div class="stage-media"><img src="terra-assets/roasting.webp" alt="Coffee beans tumbling in the roaster at 208°C" loading="lazy" /></div>
+        <div>
+          <div class="stage-no">01 — Roast</div>
+          <h3>208°C, and the room already smells like this</h3>
+          <p>Beans tumble slowly until the first crack releases their oils — and their aroma. We roast in batches small enough to taste every one.</p>
+        </div>
+      </div>
+
+      <div class="stage reveal">
+        <div class="stage-media"><img src="terra-assets/cracked-bean.webp" alt="A single roasted coffee bean, split open" loading="lazy" /></div>
+        <div>
+          <div class="stage-no">02 — Crack</div>
+          <h3>The moment it happens</h3>
+          <p>Sugars caramelize, the shell splits open, and the scent turns from grassy to deep, dark and sweet. This is the bean we stop the roast at.</p>
+        </div>
+      </div>
+
+      <div class="stage reveal">
+        <div class="stage-media"><img src="terra-assets/ground.webp" alt="Freshly ground coffee, fine and aromatic" loading="lazy" /></div>
+        <div>
+          <div class="stage-no">03 — Grind</div>
+          <h3>Ground fresh, seconds before brewing</h3>
+          <p>Never a minute before. Aroma fades fast once a bean is broken open — so nothing is pre-ground, ever.</p>
+        </div>
+      </div>
+
+      <div class="stage reveal">
+        <div class="stage-media"><img src="terra-assets/turka.webp" alt="Turkish coffee brewing in a hand-hammered copper cezve" loading="lazy" /></div>
+        <div>
+          <div class="stage-no">04 — Brew</div>
+          <h3>Still made the old way</h3>
+          <p>Slow-brewed in hand-hammered copper over low heat, foam rising to the rim — filling the whole room with it before it ever reaches a cup.</p>
+        </div>
+      </div>
+
+      <div class="stage reveal">
+        <div class="stage-media"><img src="terra-assets/cup.webp" alt="Coffee served in a handmade ceramic cup" loading="lazy" /></div>
+        <div>
+          <div class="stage-no">05 — Serve</div>
+          <h3>Poured into hand-thrown ceramic</h3>
+          <p>The last step of a very long journey — and the only one you actually get to taste.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">What We Pour</span>
+        <h2>Menu</h2>
+        <p>A short list, done properly.</p>
+      </div>
+      <div class="menu-list reveal">
+        <div class="menu-row">
+          <div><div class="menu-name">Espresso</div><div class="menu-notes">Dark chocolate, toasted hazelnut, a whisper of orange peel.</div></div>
+          <div class="menu-price">$4.00</div>
+        </div>
+        <div class="menu-row">
+          <div><div class="menu-name">Pour-Over</div><div class="menu-notes">Bright and clean — stone fruit, honey, a trace of jasmine.</div></div>
+          <div class="menu-price">$5.50</div>
+        </div>
+        <div class="menu-row">
+          <div><div class="menu-name">Turkish Coffee</div><div class="menu-notes">Thick, unfiltered, cardamom-kissed. Served the traditional way.</div></div>
+          <div class="menu-price">$4.50</div>
+        </div>
+        <div class="menu-row">
+          <div><div class="menu-name">Cortado</div><div class="menu-notes">Espresso softened with warm milk, cocoa on the finish.</div></div>
+          <div class="menu-price">$5.00</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="visit" id="visit">
+    <div class="visit-media">
+      <img src="terra-assets/cup.webp" alt="TERRA coffee cup on a wooden table" loading="lazy" />
+    </div>
+    <div class="visit-info reveal">
+      <div>
+        <span class="eyebrow">Visit</span>
+        <h2>Come smell it for yourself</h2>
+        <div class="visit-row"><div class="k">Address</div><div class="v">14 Roastery Lane, Arts District</div></div>
+        <div class="visit-row"><div class="k">Hours</div><div class="v">Mon – Sun, 7:00 AM – 6:00 PM</div></div>
+        <div class="visit-row"><div class="k">Beans</div><div class="v">Fresh roast, available to take home</div></div>
+        <div style="margin-top:30px;"><a href="#top" class="btn btn-fill">Get directions</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact">
+    <div class="wrap reveal">
+      <span class="eyebrow">Say Hello</span>
+      <h2>Let's brew something together</h2>
+      <p>Follow along, or stop by — the roaster runs most mornings.</p>
+      <a href="#top" class="btn btn-fill">Book a table</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <span>© <span id="yr">2026</span> TERRA · Single-Origin Coffee</span>
+    <div class="foot-links">
+      <a href="#">Instagram</a>
+      <a href="#">Telegram</a>
+      <a href="index.html">MARU TECH WING — demo project ↗</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  var els = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:0.12 });
+    els.forEach(function(el){ io.observe(el); });
+  } else { els.forEach(function(el){ el.classList.add('in'); }); }
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href');
+      if(id.length > 1){ var t = document.querySelector(id); if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); } }
+    });
+  });
+</script>
+
+</body>
+</html>
