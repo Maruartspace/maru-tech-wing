@@ -7,131 +7,127 @@
 <meta name="description" content="TERRA — a single-origin coffee roastery. Slow-roasted, hand-brewed, traced from seed to cup." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --ink:#1B140F; --paper:#F6EFE3; --paper-2:#EFE4D2;
-    --terra:#C2662D; --terra-deep:#8C471C;
-    --mut:#8A7A68; --mut-2:#4A3D30;
-    --border:rgba(27,20,15,.12);
-    --on-dark:#F6EFE3; --on-dark-mut:#B8A692; --dark-card:#241A13; --dark-border:#3A2C20;
-    --fd:'Instrument Serif',Georgia,serif; --fb:'Inter',system-ui,sans-serif; --fm:'JetBrains Mono',monospace;
-    --r:18px;
+    --ink:#0F0A07; --paper:#F5EFE3; --paper-dim:#E7DCC6;
+    --terra:#C2662D; --terra-2:#E28744;
+    --mut:#B7A98F; --mut-2:#5A4E3D;
+    --border:rgba(245,239,227,.14); --border-lt:rgba(15,10,7,.14);
+    --fd:'Inter',system-ui,sans-serif; --fs:'Playfair Display',Georgia,serif; --fm:'JetBrains Mono',monospace;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--fb); font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  body{margin:0; background:var(--ink); color:var(--paper); font-family:var(--fd); font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
   img{max-width:100%; display:block;}
-  .wrap{max-width:1160px; margin:0 auto; padding:0 28px;}
-  h1,h2,h3{font-family:var(--fd); font-weight:400; letter-spacing:-.01em; line-height:1.04; margin:0;}
+  .wrap{max-width:1240px; margin:0 auto; padding:0 32px;}
+  h1,h2,h3{font-family:var(--fd); font-weight:900; letter-spacing:-.03em; line-height:.98; margin:0;}
+  em{font-family:var(--fs); font-style:italic; font-weight:400; color:var(--terra-2);}
   a{color:inherit; text-decoration:none;}
-  .eyebrow{font-family:var(--fm); font-weight:500; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--terra);}
-  .eyebrow::before{content:"( "; } .eyebrow::after{content:" )"; }
-  .btn{display:inline-flex; align-items:center; gap:9px; font-family:var(--fb); font-weight:600; font-size:15px; padding:15px 30px; border-radius:40px; cursor:pointer; transition:transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease; border:1.5px solid transparent;}
-  .btn-fill{background:var(--terra); color:#fff;}
-  .btn-fill:hover{transform:translateY(-2px); background:var(--terra-deep);}
-  .btn-ghost{border-color:var(--border); color:var(--ink);}
-  .btn-ghost:hover{transform:translateY(-2px); border-color:var(--terra); color:var(--terra);}
-  .btn-cream{background:var(--paper); color:var(--ink);}
-  .btn-cream:hover{transform:translateY(-2px);}
+  .eyebrow{font-family:var(--fm); font-weight:500; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--terra);}
+
+  .btn{display:inline-flex; align-items:center; gap:10px; font-family:var(--fd); font-weight:700; font-size:15px; padding:16px 30px; border-radius:3px; cursor:pointer; transition:transform .18s ease, background .18s ease; border:none;}
+  .btn-fill{background:var(--terra); color:var(--ink);}
+  .btn-fill:hover{transform:translateY(-2px); background:var(--terra-2);}
+  .link-arrow{display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:15px; border-bottom:2px solid currentColor; padding-bottom:3px; transition:gap .18s ease, opacity .18s ease;}
+  .link-arrow:hover{gap:13px;}
 
   .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);}
   .reveal.in{opacity:1; transform:none;}
   @media (prefers-reduced-motion:reduce){ *{animation:none!important;} .reveal{opacity:1; transform:none; transition:none;} }
 
   /* HEADER */
-  header{position:sticky; top:0; z-index:50; background:rgba(246,239,227,.86); backdrop-filter:blur(10px); border-bottom:1px solid var(--border);}
-  .nav{display:flex; align-items:center; justify-content:space-between; height:78px;}
-  .brand{font-family:var(--fd); font-size:24px; letter-spacing:.06em;}
-  .brand b{color:var(--terra); font-style:italic;}
-  .nav-links{display:flex; gap:34px; font-family:var(--fm); font-size:13px; letter-spacing:.06em; text-transform:uppercase;}
-  .nav-links a{opacity:.75; transition:opacity .15s;}
-  .nav-links a:hover{opacity:1; color:var(--terra);}
-  .burger{display:none;}
+  header{position:sticky; top:0; z-index:50; background:rgba(15,10,7,.82); backdrop-filter:blur(10px); border-bottom:1px solid var(--border);}
+  .nav{display:flex; align-items:center; justify-content:space-between; height:82px;}
+  .brand{font-size:24px; font-weight:900; letter-spacing:-.01em;}
+  .brand em{font-style:normal; color:var(--terra);}
+  .nav-links{display:flex; gap:36px; font-family:var(--fm); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase;}
+  .nav-links a{opacity:.7; transition:opacity .15s;}
+  .nav-links a:hover{opacity:1; color:var(--terra-2);}
   @media(max-width:760px){ .nav-links{display:none;} }
 
   /* HERO */
-  .hero{position:relative; min-height:92vh; display:flex; align-items:flex-end; color:var(--on-dark); overflow:hidden;}
-  .hero-bg{position:absolute; inset:0; background:url('terra-assets/hero-beans.webp') center 62%/cover no-repeat;}
-  .hero-scrim{position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,14,10,.35) 0%, rgba(20,14,10,.55) 55%, rgba(18,12,8,.92) 100%);}
-  .hero-in{position:relative; z-index:2; padding:120px 0 72px;}
-  .hero .eyebrow{color:#E7B98A;}
-  .hero h1{font-size:clamp(42px,7vw,84px); font-weight:400; max-width:14ch; margin:18px 0 22px; font-style:italic;}
-  .hero p{max-width:46ch; color:var(--on-dark-mut); font-size:18px; margin:0 0 34px;}
-  .hero-cta{display:flex; gap:14px; flex-wrap:wrap;}
+  .hero{position:relative; min-height:100vh; display:flex; align-items:flex-end;}
+  .hero-bg{position:absolute; inset:0; background:url('terra-assets/hero-beans.webp') center 60%/cover no-repeat;}
+  .hero-scrim{position:absolute; inset:0; background:linear-gradient(180deg, rgba(10,7,5,.25) 0%, rgba(10,7,5,.55) 55%, rgba(9,6,4,.95) 100%);}
+  .hero-in{position:relative; z-index:2; padding:150px 0 84px;}
+  .hero h1{font-size:clamp(46px,8.4vw,118px); max-width:16ch; margin:22px 0 30px;}
+  .hero p{max-width:44ch; color:var(--mut); font-size:18px; margin:0 0 40px;}
+  .hero-cta{display:flex; gap:32px; align-items:center; flex-wrap:wrap;}
 
-  .steam{position:absolute; width:3px; border-radius:3px; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.55) 40%, rgba(255,255,255,0) 100%); filter:blur(2px); animation:rise 5.5s ease-in infinite; pointer-events:none;}
-  @keyframes rise{ 0%{ transform:translateY(0) scaleX(1); opacity:0; } 15%{ opacity:.8; } 100%{ transform:translateY(-140px) scaleX(2.2); opacity:0; } }
+  .steam{position:absolute; width:3px; border-radius:3px; background:linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.5) 40%, rgba(255,255,255,0) 100%); filter:blur(2px); animation:rise 5.5s ease-in infinite; pointer-events:none;}
+  @keyframes rise{ 0%{ transform:translateY(0) scaleX(1); opacity:0; } 15%{ opacity:.75; } 100%{ transform:translateY(-140px) scaleX(2.2); opacity:0; } }
 
-  /* SECTION shared */
-  section{padding:120px 0;}
-  .sec-head{max-width:640px; margin:0 auto 64px; text-align:center;}
-  .sec-head h2{font-size:clamp(32px,5vw,50px); margin:16px 0;}
-  .sec-head p{color:var(--mut); font-size:17px;}
+  section{padding:150px 0;}
+  .sec-head{max-width:680px; margin:0 auto 70px;}
+  .sec-head h2{font-size:clamp(36px,6vw,64px); margin:18px 0;}
+  .sec-head p{color:var(--mut); font-size:17.5px; max-width:52ch;}
 
-  /* STORY (seed to cup) */
-  .story{background:var(--paper-2);}
-  .stage{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; margin-bottom:110px;}
-  .stage:last-child{margin-bottom:0;}
-  .stage:nth-child(even) .stage-media{order:2;}
-  .stage-media{position:relative; border-radius:var(--r); overflow:hidden; aspect-ratio:1/1;}
-  .stage-media img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
-  .stage-media:hover img{transform:scale(1.05);}
-  .stage-no{font-family:var(--fm); font-size:13px; letter-spacing:.14em; color:var(--terra); margin-bottom:10px;}
-  .stage h3{font-size:clamp(28px,4vw,40px); margin-bottom:16px;}
-  .stage p{color:var(--mut-2); font-size:16.5px; max-width:42ch;}
-  @media(max-width:820px){ .stage{grid-template-columns:1fr; gap:26px;} .stage:nth-child(even) .stage-media{order:0;} .stage{margin-bottom:64px;} }
+  /* ASSEMBLY (seed to cup, scroll-scrubbed) */
+  .assembly{background:var(--ink); padding:150px 0 90px;}
+  .assembly-pin{display:flex; flex-direction:column; justify-content:center; min-height:70vh;}
+  .assembly-stage{position:relative; display:flex; justify-content:center; align-items:center; gap:1.6vw; flex-wrap:wrap; margin:0 auto 54px; max-width:1100px;}
+  .piece{position:relative; width:15.6vw; max-width:190px; min-width:118px; aspect-ratio:1/1; overflow:hidden; flex:none;}
+  .piece img{width:100%; height:100%; object-fit:cover;}
+  .piece-no{position:absolute; top:10px; left:10px; font-family:var(--fm); font-size:11px; letter-spacing:.08em; color:var(--paper); background:rgba(15,10,7,.55); padding:3px 7px;}
+  .assembly-caption{position:relative; text-align:center; min-height:64px;}
+  .assembly-caption .cap{font-size:17px; color:var(--mut); max-width:56ch; margin:0 auto 14px;}
+  .assembly-caption .cap b{color:var(--paper); font-weight:700;}
+  .has-js .assembly-caption{ }
+  .has-js .assembly-caption .cap{position:absolute; inset:0 auto auto 50%; transform:translateX(-50%); opacity:0; margin:0; width:100%;}
+  @media(max-width:760px){ .assembly{padding:110px 0 70px;} .assembly-stage{gap:10px;} .piece{width:26vw;} }
 
   /* MENU */
-  .menu{background:var(--ink); color:var(--on-dark);}
-  .menu .sec-head p{color:var(--on-dark-mut);}
-  .menu-list{max-width:720px; margin:0 auto;}
-  .menu-row{display:flex; justify-content:space-between; gap:24px; padding:26px 0; border-bottom:1px solid var(--dark-border);}
-  .menu-row:last-child{border-bottom:none;}
-  .menu-name{font-family:var(--fd); font-size:24px; font-style:italic;}
-  .menu-notes{color:var(--on-dark-mut); font-size:14.5px; margin-top:6px; max-width:44ch;}
-  .menu-price{font-family:var(--fm); font-size:15px; color:var(--terra); white-space:nowrap; padding-top:4px;}
+  .menu{background:var(--paper); color:var(--ink);}
+  .menu .sec-head p{color:var(--mut-2);}
+  .menu-list{max-width:760px; margin:0 auto;}
+  .menu-row{display:flex; justify-content:space-between; gap:24px; padding:30px 0; border-bottom:1px solid var(--border-lt);}
+  .menu-row:first-child{border-top:1px solid var(--border-lt);}
+  .menu-name{font-size:26px; font-weight:800; letter-spacing:-.02em;}
+  .menu-notes{color:var(--mut-2); font-size:14.5px; margin-top:8px; max-width:46ch; font-family:var(--fd); font-weight:400; letter-spacing:0;}
+  .menu-price{font-family:var(--fm); font-size:15px; color:var(--terra); white-space:nowrap; padding-top:6px;}
 
   /* VISIT */
-  .visit{display:grid; grid-template-columns:1fr 1fr; gap:0; align-items:stretch;}
-  .visit-media{position:relative; min-height:520px;}
+  .visit{display:grid; grid-template-columns:1fr 1fr; gap:0; align-items:stretch; padding:0;}
+  .visit-media{position:relative; min-height:600px;}
   .visit-media img{width:100%; height:100%; object-fit:cover; position:absolute; inset:0;}
-  .visit-info{display:flex; align-items:center; padding:80px 60px;}
-  .visit-info h2{font-size:clamp(30px,4vw,44px); margin-bottom:22px;}
-  .visit-row{display:flex; gap:14px; padding:16px 0; border-top:1px solid var(--border);}
+  .visit-info{display:flex; align-items:center; padding:90px 64px;}
+  .visit-info h2{font-size:clamp(32px,4.5vw,50px); margin-bottom:26px;}
+  .visit-row{display:flex; gap:16px; padding:18px 0; border-top:1px solid var(--border);}
   .visit-row:last-of-type{border-bottom:1px solid var(--border);}
-  .visit-row .k{font-family:var(--fm); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--terra); width:110px; flex:none; padding-top:2px;}
-  .visit-row .v{color:var(--mut-2);}
-  @media(max-width:820px){ .visit{grid-template-columns:1fr;} .visit-media{min-height:340px;} .visit-info{padding:56px 28px;} }
+  .visit-row .k{font-family:var(--fm); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--terra); width:110px; flex:none; padding-top:2px;}
+  .visit-row .v{color:var(--mut);}
+  @media(max-width:820px){ .visit{grid-template-columns:1fr;} .visit-media{min-height:340px;} .visit-info{padding:64px 28px;} }
 
-  /* CONTACT / FOOTER */
-  .contact{text-align:center;}
-  .contact h2{font-size:clamp(34px,6vw,58px); font-style:italic; margin-bottom:18px;}
-  .contact p{color:var(--mut); max-width:44ch; margin:0 auto 34px;}
-  footer{background:var(--ink); color:var(--on-dark-mut); padding:44px 0;}
-  .foot-in{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; font-size:14px;}
-  .foot-in a{opacity:.85;} .foot-in a:hover{opacity:1; color:var(--terra);}
-  .foot-links{display:flex; gap:22px;}
+  /* CONTACT */
+  .contact{text-align:center; padding-bottom:110px;}
+  .contact h2{font-size:clamp(40px,8vw,96px); margin-bottom:26px;}
+  .contact p{color:var(--mut); max-width:44ch; margin:0 auto 40px; font-size:17.5px;}
+
+  footer{background:var(--ink); border-top:1px solid var(--border); padding:44px 0;}
+  .foot-in{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; font-size:13.5px; color:var(--mut);}
+  .foot-in a{opacity:.85;} .foot-in a:hover{opacity:1; color:var(--terra-2);}
+  .foot-links{display:flex; gap:26px; font-family:var(--fm); text-transform:uppercase; letter-spacing:.08em; font-size:12px;}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav">
-    <a href="#top" class="brand">TE<b>RR</b>A</a>
+    <a href="#top" class="brand">TE<em>RR</em>A</a>
     <nav class="nav-links">
       <a href="#story">Story</a>
       <a href="#menu">Menu</a>
       <a href="#visit">Visit</a>
     </nav>
-    <a href="#visit" class="btn btn-fill" style="padding:11px 22px; font-size:13px;">Find Us</a>
+    <a href="#visit" class="link-arrow">Find us →</a>
   </div>
 </header>
 
 <main id="top">
 
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero" style="padding:0;">
     <div class="hero-bg"></div>
     <div class="hero-scrim"></div>
     <div class="steam" style="left:22%; bottom:38%; animation-delay:0s;"></div>
@@ -139,69 +135,39 @@
     <div class="steam" style="left:68%; bottom:36%; animation-delay:3.2s;"></div>
     <div class="wrap hero-in reveal">
       <span class="eyebrow">Single-Origin · Small Batch</span>
-      <h1>Coffee you can smell from the doorway.</h1>
-      <p>Slow-roasted in small batches, brewed the old way. TERRA is built around one idea: the aroma should reach you before the first sip does.</p>
+      <h1>Smell <em>it</em> before you taste it.</h1>
+      <p>Slow-roasted in small batches, brewed the old way. TERRA is built around one idea: the aroma reaches you before the first sip does.</p>
       <div class="hero-cta">
-        <a href="#story" class="btn btn-fill">See the journey</a>
-        <a href="#menu" class="btn btn-ghost" style="border-color:rgba(246,239,227,.35); color:var(--on-dark);">View menu</a>
+        <a href="#story" class="btn btn-fill">Explore the roast →</a>
+        <a href="#menu" class="link-arrow">View menu</a>
       </div>
     </div>
   </section>
 
-  <!-- STORY: SEED TO CUP -->
-  <section class="story" id="story">
-    <div class="wrap">
-      <div class="sec-head reveal">
+  <!-- ASSEMBLY: SEED TO CUP -->
+  <section class="assembly" id="story">
+    <div class="wrap assembly-pin">
+      <div class="sec-head reveal" style="margin:0 auto 64px; text-align:center;">
         <span class="eyebrow">The Journey</span>
-        <h2>From seed to cup, nothing hidden</h2>
-        <p>Five moments, one bean. Every stage changes its aroma — we roast, grind and pour to protect exactly that.</p>
+        <h2>Watch it come together</h2>
+        <p style="margin:18px auto 0;">Five stages, one bean. Scroll — the pieces assemble right in front of you.</p>
       </div>
 
-      <div class="stage reveal">
-        <div class="stage-media"><img src="terra-assets/roasting.webp" alt="Coffee beans tumbling in the roaster at 208°C" loading="lazy" /></div>
-        <div>
-          <div class="stage-no">01 — Roast</div>
-          <h3>208°C, and the room already smells like this</h3>
-          <p>Beans tumble slowly until the first crack releases their oils — and their aroma. We roast in batches small enough to taste every one.</p>
-        </div>
+      <div class="assembly-stage">
+        <div class="piece" data-piece="1"><img src="terra-assets/roasting.webp" alt="Coffee beans tumbling in the roaster at 208°C" loading="lazy" /><span class="piece-no">01</span></div>
+        <div class="piece" data-piece="2"><img src="terra-assets/cracked-bean.webp" alt="A single roasted coffee bean, split open" loading="lazy" /><span class="piece-no">02</span></div>
+        <div class="piece" data-piece="3"><img src="terra-assets/ground.webp" alt="Freshly ground coffee" loading="lazy" /><span class="piece-no">03</span></div>
+        <div class="piece" data-piece="4"><img src="terra-assets/turka.webp" alt="Turkish coffee brewing in a copper cezve" loading="lazy" /><span class="piece-no">04</span></div>
+        <div class="piece" data-piece="5"><img src="terra-assets/cup.webp" alt="Coffee served in a handmade ceramic cup" loading="lazy" /><span class="piece-no">05</span></div>
       </div>
 
-      <div class="stage reveal">
-        <div class="stage-media"><img src="terra-assets/cracked-bean.webp" alt="A single roasted coffee bean, split open" loading="lazy" /></div>
-        <div>
-          <div class="stage-no">02 — Crack</div>
-          <h3>The moment it happens</h3>
-          <p>Sugars caramelize, the shell splits open, and the scent turns from grassy to deep, dark and sweet. This is the bean we stop the roast at.</p>
-        </div>
+      <div class="assembly-caption">
+        <div class="cap" data-cap="1"><b>Roast —</b> 208°C, until the first crack releases the aroma.</div>
+        <div class="cap" data-cap="2"><b>Crack —</b> sugars caramelize, the shell splits open, the scent turns dark and sweet.</div>
+        <div class="cap" data-cap="3"><b>Grind —</b> fresh, seconds before brewing. Never a minute before.</div>
+        <div class="cap" data-cap="4"><b>Brew —</b> slow, in hand-hammered copper, over low heat, the old way.</div>
+        <div class="cap" data-cap="5"><b>Serve —</b> poured into hand-thrown ceramic. The last step — and the only one you taste.</div>
       </div>
-
-      <div class="stage reveal">
-        <div class="stage-media"><img src="terra-assets/ground.webp" alt="Freshly ground coffee, fine and aromatic" loading="lazy" /></div>
-        <div>
-          <div class="stage-no">03 — Grind</div>
-          <h3>Ground fresh, seconds before brewing</h3>
-          <p>Never a minute before. Aroma fades fast once a bean is broken open — so nothing is pre-ground, ever.</p>
-        </div>
-      </div>
-
-      <div class="stage reveal">
-        <div class="stage-media"><img src="terra-assets/turka.webp" alt="Turkish coffee brewing in a hand-hammered copper cezve" loading="lazy" /></div>
-        <div>
-          <div class="stage-no">04 — Brew</div>
-          <h3>Still made the old way</h3>
-          <p>Slow-brewed in hand-hammered copper over low heat, foam rising to the rim — filling the whole room with it before it ever reaches a cup.</p>
-        </div>
-      </div>
-
-      <div class="stage reveal">
-        <div class="stage-media"><img src="terra-assets/cup.webp" alt="Coffee served in a handmade ceramic cup" loading="lazy" /></div>
-        <div>
-          <div class="stage-no">05 — Serve</div>
-          <h3>Poured into hand-thrown ceramic</h3>
-          <p>The last step of a very long journey — and the only one you actually get to taste.</p>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -211,7 +177,6 @@
       <div class="sec-head reveal">
         <span class="eyebrow">What We Pour</span>
         <h2>Menu</h2>
-        <p>A short list, done properly.</p>
       </div>
       <div class="menu-list reveal">
         <div class="menu-row">
@@ -242,11 +207,11 @@
     <div class="visit-info reveal">
       <div>
         <span class="eyebrow">Visit</span>
-        <h2>Come smell it for yourself</h2>
+        <h2 style="margin-top:14px;">Come smell it for yourself</h2>
         <div class="visit-row"><div class="k">Address</div><div class="v">14 Roastery Lane, Arts District</div></div>
         <div class="visit-row"><div class="k">Hours</div><div class="v">Mon – Sun, 7:00 AM – 6:00 PM</div></div>
         <div class="visit-row"><div class="k">Beans</div><div class="v">Fresh roast, available to take home</div></div>
-        <div style="margin-top:30px;"><a href="#top" class="btn btn-fill">Get directions</a></div>
+        <div style="margin-top:34px;"><a href="#top" class="btn btn-fill">Get directions →</a></div>
       </div>
     </div>
   </section>
@@ -255,8 +220,8 @@
   <section class="contact">
     <div class="wrap reveal">
       <span class="eyebrow">Say Hello</span>
-      <h2>Let's brew something together</h2>
-      <p>Follow along, or stop by — the roaster runs most mornings.</p>
+      <h2 style="margin-top:18px;">Let's brew<br/><em>something</em> together.</h2>
+      <p style="margin-top:26px;">Follow along, or stop by — the roaster runs most mornings.</p>
       <a href="#top" class="btn btn-fill">Book a table</a>
     </div>
   </section>
@@ -274,9 +239,12 @@
   </div>
 </footer>
 
+<script src="terra-assets/vendor/gsap.min.js"></script>
+<script src="terra-assets/vendor/ScrollTrigger.min.js"></script>
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
 
+  // reveal-on-scroll (guarded)
   var els = document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window){
     var io = new IntersectionObserver(function(entries){
@@ -285,12 +253,70 @@
     els.forEach(function(el){ io.observe(el); });
   } else { els.forEach(function(el){ el.classList.add('in'); }); }
 
+  // smooth anchor scroll
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
     a.addEventListener('click', function(e){
       var id = a.getAttribute('href');
       if(id.length > 1){ var t = document.querySelector(id); if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); } }
     });
   });
+
+  // ASSEMBLY: pieces scatter apart, then reassemble as you scroll.
+  // Default DOM/CSS state is already the assembled layout, so no-JS and
+  // reduced-motion users simply see the finished row + all captions — never a broken page.
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canPin = window.matchMedia('(min-width: 900px)').matches;
+
+  if(window.gsap && window.ScrollTrigger && !reduceMotion && canPin){
+    gsap.registerPlugin(ScrollTrigger);
+    var section = document.querySelector('.assembly');
+    var stageWrap = document.querySelector('.assembly-pin');
+    var pieces = gsap.utils.toArray('.piece');
+    var caps = gsap.utils.toArray('.cap');
+    document.querySelector('.assembly').classList.add('has-js');
+
+    var offsets = [
+      { x:-0.34, y:-0.30, r:-16, s:.55 },
+      { x: 0.32, y:-0.34, r: 13, s:.55 },
+      { x:-0.30, y: 0.32, r: 10, s:.55 },
+      { x: 0.34, y: 0.30, r:-12, s:.55 },
+      { x: 0,    y: 0,    r:  0, s:.45 }
+    ];
+
+    function setScattered(){
+      pieces.forEach(function(el, i){
+        gsap.set(el, {
+          x: offsets[i].x * window.innerWidth,
+          y: offsets[i].y * window.innerHeight,
+          rotate: offsets[i].r,
+          scale: offsets[i].s,
+          opacity: i === 4 ? 0 : 0.15
+        });
+      });
+      gsap.set(caps, { opacity:0 });
+    }
+    setScattered();
+
+    var tl = gsap.timeline({
+      scrollTrigger:{
+        trigger: section,
+        start:'top top',
+        end:'+=380%',
+        scrub:0.8,
+        pin: stageWrap,
+        anticipatePin:1,
+        invalidateOnRefresh:true,
+        onRefreshInit: setScattered
+      }
+    });
+
+    pieces.forEach(function(el, i){
+      var t = i * 0.85;
+      tl.to(el, { x:0, y:0, rotate:0, scale:1, opacity:1, duration:1, ease:'power2.out' }, t);
+      tl.to(caps[i], { opacity:1, duration:.3 }, t + 0.35);
+      if(i < pieces.length - 1){ tl.to(caps[i], { opacity:0, duration:.3 }, t + 0.85); }
+    });
+  }
 </script>
 
 </body>
