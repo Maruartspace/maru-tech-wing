@@ -70,8 +70,12 @@
   .piece{position:relative; width:15.6vw; max-width:190px; min-width:118px; aspect-ratio:1/1; overflow:hidden; flex:none;}
   .piece img{width:100%; height:100%; object-fit:cover;}
   .piece-no{position:absolute; top:10px; left:10px; font-family:var(--fm); font-size:11px; letter-spacing:.08em; color:var(--paper); background:rgba(15,10,7,.55); padding:3px 7px;}
-  .shatter-box{width:min(66vw,600px); aspect-ratio:1/1; margin:0 auto 54px; position:relative;}
-  .shatter-box canvas{width:100%; height:100%; display:block;}
+  .cinema-box{width:min(70vw,680px); aspect-ratio:1/1; margin:0 auto 54px; position:relative; overflow:hidden; border-radius:2px;}
+  .cinema-layer{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transform:scale(1); will-change:transform,opacity;}
+  .cinema-layer:first-child{opacity:1;}
+  .cinema-vignette{position:absolute; inset:0; box-shadow:inset 0 0 90px 10px rgba(0,0,0,.55); pointer-events:none;}
+
+  .btn.magnetic, .link-arrow.magnetic{will-change:transform;}
 
   .assembly-caption{position:relative; text-align:center; min-height:64px;}
   .assembly-caption .cap{font-size:17px; color:var(--mut); max-width:56ch; margin:0 auto 14px;}
@@ -156,8 +160,13 @@
         <p style="margin:18px auto 0;" id="storyHint">Five stages, one bean. Scroll — the pieces assemble right in front of you.</p>
       </div>
 
-      <div class="shatter-box" id="shatterBox" hidden>
-        <canvas id="shatterCanvas"></canvas>
+      <div class="cinema-box" id="cinemaBox" hidden>
+        <img class="cinema-layer" src="terra-assets/roasting.webp" alt="" />
+        <img class="cinema-layer" src="terra-assets/cracked-bean.webp" alt="" />
+        <img class="cinema-layer" src="terra-assets/ground.webp" alt="" />
+        <img class="cinema-layer" src="terra-assets/turka.webp" alt="" />
+        <img class="cinema-layer" src="terra-assets/cup.webp" alt="" />
+        <div class="cinema-vignette"></div>
       </div>
 
       <div class="assembly-stage" id="fallbackStage">
@@ -268,146 +277,67 @@
     });
   });
 
-  // STORY: each photo shatters into fragments and reassembles as you scroll,
-  // then blows apart again into the next photo. Canvas + real physical break-up,
-  // not just a fade. Default DOM (#fallbackStage) is the plain assembled row —
-  // it stays as the no-JS / reduced-motion / narrow-screen fallback and is only
-  // hidden once the canvas is actually ready to draw, so the page is never broken.
+  // STORY: a calm cinematic slideshow — each photo holds under a slow
+  // continuous zoom (Ken Burns push-in), then crossfades into the next as
+  // you scroll. No shatter, no scatter. Default DOM (#fallbackStage) is the
+  // plain assembled row — it's the no-JS / reduced-motion / narrow-screen
+  // fallback and is only hidden once the cinema box is actually ready.
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var canPin = window.matchMedia('(min-width: 900px)').matches;
 
-  if(window.gsap && window.ScrollTrigger && !reduceMotion && canPin && document.getElementById('shatterCanvas').getContext){
+  if(window.gsap && window.ScrollTrigger && !reduceMotion && canPin){
     gsap.registerPlugin(ScrollTrigger);
 
-    var SOURCES = [
-      'terra-assets/roasting.webp',
-      'terra-assets/cracked-bean.webp',
-      'terra-assets/ground.webp',
-      'terra-assets/turka.webp',
-      'terra-assets/cup.webp'
-    ];
-    var CAPTION_TEXT = [
-      '<b>Roast —</b> 208°C, until the first crack releases the aroma.',
-      '<b>Crack —</b> sugars caramelize, the shell splits open, the scent turns dark and sweet.',
-      '<b>Grind —</b> fresh, seconds before brewing. Never a minute before.',
-      '<b>Brew —</b> slow, in hand-hammered copper, over low heat, the old way.',
-      '<b>Serve —</b> poured into hand-thrown ceramic. The last step — and the only one you taste.'
-    ];
+    var box = document.getElementById('cinemaBox');
+    var layers = gsap.utils.toArray('.cinema-layer');
+    var fallback = document.getElementById('fallbackStage');
+    var hint = document.getElementById('storyHint');
+    var caps = gsap.utils.toArray('.cap');
 
-    Promise.all(SOURCES.map(function(src){
-      return new Promise(function(resolve){
-        var img = new Image();
-        img.onload = function(){ resolve(img); };
-        img.onerror = function(){ resolve(null); };
-        img.src = src;
-      });
-    })).then(function(images){
-      if(images.indexOf(null) !== -1) return; // a photo failed to load — keep the plain fallback row
+    box.hidden = false;
+    fallback.style.display = 'none';
+    hint.textContent = 'Five stages, one bean. Scroll — watch the camera move through each one.';
 
-      var box = document.getElementById('shatterBox');
-      var canvas = document.getElementById('shatterCanvas');
-      var ctx = canvas.getContext('2d');
-      var fallback = document.getElementById('fallbackStage');
-      var hint = document.getElementById('storyHint');
-      var caps = gsap.utils.toArray('.cap');
+    gsap.set(layers, { scale: 1.12, opacity: 0 });
+    gsap.set(layers[0], { opacity: 1 });
+    gsap.set(caps, { opacity: 0 });
+    caps[0].style.opacity = 1;
 
-      box.hidden = false;
-      fallback.style.display = 'none';
-      hint.textContent = 'Five stages, one bean. Scroll — watch each one break apart and reform.';
-
-      var GRID = 9;               // 9x9 fragments per photo
-      var DPR = Math.min(window.devicePixelRatio || 1, 2);
-      var cssSize = 0, tile = 0;
-
-      // Precomputed per-fragment break-up motion, shared by every photo so
-      // the effect reads as one consistent mechanism, not random noise.
-      var frag = [];
-      for(var row = 0; row < GRID; row++){
-        for(var col = 0; col < GRID; col++){
-          var cx = col - (GRID - 1) / 2, cy = row - (GRID - 1) / 2;
-          var len = Math.sqrt(cx * cx + cy * cy) || 1;
-          var jitter = (Math.random() - 0.5) * 1.1;
-          frag.push({
-            row: row, col: col,
-            dirX: cx / len + jitter, dirY: cy / len + jitter,
-            dist: 0.55 + Math.random() * 0.65,
-            rot: (Math.random() - 0.5) * 2.2,
-            scaleMin: 0.35 + Math.random() * 0.25,
-            alphaMin: 0.55 + Math.random() * 0.3
-          });
-        }
-      }
-
-      function sizeCanvas(){
-        cssSize = box.clientWidth;
-        tile = cssSize / GRID;
-        canvas.width = cssSize * DPR;
-        canvas.height = cssSize * DPR;
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      }
-      sizeCanvas();
-
-      function draw(imgIndex, amount){
-        var img = images[imgIndex];
-        var iw = img.naturalWidth, ih = img.naturalHeight;
-        var sTile = iw / GRID; // assumes square source images
-        ctx.clearRect(0, 0, cssSize, cssSize);
-        for(var i = 0; i < frag.length; i++){
-          var f = frag[i];
-          var dcx = f.col * tile + tile / 2, dcy = f.row * tile + tile / 2;
-          var offset = amount * f.dist * cssSize * 0.62;
-          var ox = f.dirX * offset, oy = f.dirY * offset;
-          var scale = 1 - (1 - f.scaleMin) * amount;
-          var alpha = 1 - (1 - f.alphaMin) * amount;
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          ctx.translate(dcx + ox, dcy + oy);
-          ctx.rotate(f.rot * amount);
-          ctx.scale(scale, scale);
-          ctx.drawImage(img, f.col * sTile, f.row * sTile, sTile, sTile, -tile / 2 - 1, -tile / 2 - 1, tile + 2, tile + 2);
-          ctx.restore();
-        }
-      }
-
-      function setCaption(idx, on){ if(caps[idx]) caps[idx].style.opacity = on ? 1 : 0; }
-      gsap.set(caps, { opacity: 0 });
-
-      var state = { i: 0, amount: 1 };
-      draw(0, 1);
-      setCaption(0, true);
-
-      ScrollTrigger.create({
+    var tl = gsap.timeline({
+      scrollTrigger:{
         trigger: '.assembly',
         start: 'top top',
-        end: '+=450%',
-        scrub: 0.7,
+        end: '+=420%',
+        scrub: 0.8,
         pin: '.assembly-pin',
         anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onRefresh: sizeCanvas,
-        onUpdate: function(self){
-          var n = images.length;
-          var raw = self.progress * n;                 // 0 .. n
-          var idx = Math.min(n - 1, Math.floor(raw));
-          var local = raw - idx;                        // 0..1 within this photo's segment
-          var amount;
-          if(idx === n - 1){
-            amount = Math.max(0, 1 - local * 2.2);       // last photo: assemble and stay whole
-          } else if(local < 0.5){
-            amount = 1 - local * 2;                      // first half: assembling in (1 -> 0)
-          } else {
-            amount = (local - 0.5) * 2;                  // second half: blowing apart (0 -> 1)
-          }
-          if(idx !== state.i){
-            setCaption(state.i, false);
-            state.i = idx;
-          }
-          setCaption(idx, amount < 0.4);
-          draw(idx, amount);
-        }
-      });
+        invalidateOnRefresh: true
+      }
+    });
 
-      window.addEventListener('resize', function(){ sizeCanvas(); draw(state.i, state.amount); });
+    layers.forEach(function(layer, i){
+      var t = i * 1; // one unit of timeline per photo
+      // slow continuous push-in for the whole time this photo is on screen
+      tl.fromTo(layer, { scale: 1 }, { scale: 1.12, duration: 1, ease:'none' }, t);
+      if(i > 0){
+        tl.to(layers[i - 1], { opacity: 0, duration: 0.35, ease:'power1.inOut' }, t - 0.175);
+        tl.to(layer, { opacity: 1, duration: 0.35, ease:'power1.inOut' }, t - 0.175);
+        tl.call(function(idx){ caps[idx - 1].style.opacity = 0; caps[idx].style.opacity = 1; }, [i], t - 0.175);
+      }
+    });
+  }
+
+  // MAGNETIC BUTTONS: pulls gently toward the cursor, snaps back on leave.
+  if(window.gsap && !reduceMotion && window.matchMedia('(hover:hover)').matches){
+    document.querySelectorAll('.btn, .link-arrow').forEach(function(el){
+      var moveX = gsap.quickTo(el, 'x', { duration:.35, ease:'power3.out' });
+      var moveY = gsap.quickTo(el, 'y', { duration:.35, ease:'power3.out' });
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        moveX((e.clientX - r.left - r.width / 2) * 0.35);
+        moveY((e.clientY - r.top - r.height / 2) * 0.35);
+      });
+      el.addEventListener('mouseleave', function(){ moveX(0); moveY(0); });
     });
   }
 
