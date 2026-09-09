@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bot de WhatsApp para tu negocio — Demo en vivo · MARU TECH WING</title>
+<meta name="description" content="Prueba en vivo un asistente de WhatsApp que reserva citas 24/7. Elige tu sector y chatea con él como si fueras cliente.">
+<style>
+  :root{
+    --wa-green-dark:#075E54;
+    --wa-green-header:#008069;
+    --wa-bubble-out:#D9FDD3;
+    --wa-bubble-in:#FFFFFF;
+    --wa-bg:#EFE7DD;
+    --wa-chip:#FFFFFF;
+    --wa-chip-text:#008069;
+    --wa-check:#53BDEB;
+    --ink:#111B21;
+    --ink-soft:#667781;
+    --accent:#B8D96A;
+    --accent-deep:#6E9C2F;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:#0b141a;
+    color:#EFE7DD;
+    min-height:100vh;
+    padding:28px 14px 60px;
+  }
+  .page{max-width:1040px;margin:0 auto;}
+
+  /* PITCH HEADER */
+  .pitch{
+    background:#12181c;
+    border:1px solid #232c31;
+    border-radius:20px;
+    padding:26px 26px 22px;
+    margin-bottom:26px;
+    text-align:center;
+  }
+  .pitch .kicker{
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:10px;
+  }
+  .pitch h1{
+    font-size:clamp(21px,3.4vw,30px);
+    line-height:1.25;
+    color:#fff;
+    max-width:34ch;
+    margin:0 auto 12px;
+  }
+  .pitch p{
+    color:#9aa5ab;
+    font-size:15px;
+    max-width:52ch;
+    margin:0 auto 20px;
+    line-height:1.5;
+  }
+  .niches{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  }
+  .niche-btn{
+    background:#1c2429;
+    border:1.5px solid #2c363c;
+    color:#cfd8dc;
+    padding:10px 16px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .niche-btn:hover{border-color:var(--accent);}
+  .niche-btn.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#0F0F12;
+  }
+
+  /* PHONE */
+  .stage{display:flex;justify-content:center;}
+  .phone{
+    width:100%;
+    max-width:420px;
+    height:min(720px, 82vh);
+    background:var(--wa-bg);
+    border-radius:22px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+    position:relative;
+  }
+  .header{
+    background:var(--wa-green-header);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    flex-shrink:0;
+    z-index:5;
+  }
+  .avatar{
+    width:40px;height:40px;border-radius:50%;
+    background:linear-gradient(135deg,#f6c1cf,#b06ab3);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;flex-shrink:0;
+  }
+  .header .info{line-height:1.25;min-width:0;}
+  .header .name{font-weight:600;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .header .status{font-size:12px;opacity:.85;}
+  .header .icons{margin-left:auto;display:flex;gap:18px;font-size:17px;opacity:.9;}
+  .chat{
+    flex:1;
+    overflow-y:auto;
+    padding:14px 12px 8px;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,.35) 0 2px, transparent 2px),
+      radial-gradient(circle at 70% 60%, rgba(255,255,255,.3) 0 1.5px, transparent 1.5px),
+      var(--wa-bg);
+    background-size:110px 110px, 90px 90px, auto;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    scroll-behavior:smooth;
+  }
+  .day-pill{
+    align-self:center;
+    background:#fff;
+    color:var(--ink-soft);
+    font-size:12px;
+    padding:4px 12px;
+    border-radius:8px;
+    box-shadow:0 1px 1px rgba(0,0,0,.08);
+    margin-bottom:4px;
+  }
+  .msg{
+    max-width:82%;
+    padding:7px 10px 6px;
+    border-radius:10px;
+    font-size:14.5px;
+    line-height:1.35;
+    color:var(--ink);
+    position:relative;
+    box-shadow:0 1px 1px rgba(0,0,0,.08);
+    white-space:pre-line;
+    animation:pop .18s ease-out;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .msg.in{background:var(--wa-bubble-in);align-self:flex-start;border-top-left-radius:2px;}
+  .msg.out{background:var(--wa-bubble-out);align-self:flex-end;border-top-right-radius:2px;}
+  .meta{
+    display:inline-flex;align-items:center;gap:3px;
+    font-size:11px;color:var(--ink-soft);
+    float:right;margin:6px -2px -2px 8px;
+  }
+  .ticks{color:var(--wa-check);font-size:12px;letter-spacing:-3px;}
+  .typing{
+    background:var(--wa-bubble-in);
+    align-self:flex-start;
+    border-radius:10px;border-top-left-radius:2px;
+    padding:12px 14px;
+    display:flex;gap:4px;
+    box-shadow:0 1px 1px rgba(0,0,0,.08);
+  }
+  .typing span{
+    width:7px;height:7px;border-radius:50%;
+    background:#9aa5ab;
+    animation:blink 1.2s infinite;
+  }
+  .typing span:nth-child(2){animation-delay:.2s;}
+  .typing span:nth-child(3){animation-delay:.4s;}
+  @keyframes blink{0%,60%,100%{opacity:.3;}30%{opacity:1;}}
+  .chips{
+    display:flex;flex-wrap:wrap;gap:8px;
+    align-self:flex-start;
+    max-width:88%;
+    padding:2px 0 4px;
+    animation:pop .18s ease-out;
+  }
+  .chip{
+    background:var(--wa-chip);
+    color:var(--wa-chip-text);
+    border:1px solid rgba(0,128,105,.35);
+    border-radius:20px;
+    padding:8px 14px;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+    box-shadow:0 1px 1px rgba(0,0,0,.06);
+    transition:background .15s, transform .1s;
+  }
+  .chip:hover{background:#e8f6f2;}
+  .chip:active{transform:scale(.96);}
+  .inputbar{
+    display:flex;align-items:center;gap:8px;
+    padding:8px 10px;
+    background:#F0F2F5;
+    flex-shrink:0;
+  }
+  .inputbar input{
+    flex:1;
+    border:none;outline:none;
+    background:#fff;
+    border-radius:20px;
+    padding:10px 16px;
+    font-size:14.5px;
+    color:var(--ink);
+  }
+  .send{
+    width:42px;height:42px;border-radius:50%;
+    background:var(--wa-green-header);
+    border:none;color:#fff;font-size:17px;
+    cursor:pointer;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .1s;
+  }
+  .send:active{transform:scale(.92);}
+  .owner-toggle{
+    position:absolute;
+    top:64px;right:10px;
+    background:#111B21;
+    color:#fff;
+    border:none;
+    border-radius:16px;
+    font-size:11.5px;
+    padding:6px 11px;
+    cursor:pointer;
+    opacity:.85;
+    z-index:6;
+  }
+  .owner{
+    position:absolute;
+    top:100px;right:10px;left:10px;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    padding:14px;
+    z-index:7;
+    display:none;
+    max-height:60%;
+    overflow-y:auto;
+  }
+  .owner.open{display:block;animation:pop .18s ease-out;}
+  .owner h3{font-size:14px;color:var(--ink);margin-bottom:2px;}
+  .owner .sub{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  .booking{
+    border-left:3px solid var(--wa-green-header);
+    background:#F0FAF7;
+    border-radius:0 8px 8px 0;
+    padding:8px 10px;
+    font-size:13px;
+    color:var(--ink);
+    margin-bottom:8px;
+    line-height:1.4;
+  }
+  .empty{font-size:13px;color:var(--ink-soft);font-style:italic;}
+  .demo-note{
+    text-align:center;
+    color:#8696a0;
+    font-size:11px;
+    padding:6px 0 2px;
+    background:#F0F2F5;
+  }
+
+  /* CTA FOOTER */
+  .cta{
+    max-width:560px;
+    margin:30px auto 0;
+    background:var(--accent);
+    color:#0F0F12;
+    border-radius:20px;
+    padding:26px 26px 24px;
+    text-align:center;
+  }
+  .cta h2{font-size:22px;margin:0 0 8px;line-height:1.3;}
+  .cta p{font-size:14.5px;margin:0 0 18px;opacity:.85;}
+  .cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .cta-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-weight:700;font-size:14.5px;
+    padding:12px 22px;border-radius:30px;
+    cursor:pointer;text-decoration:none;
+    transition:transform .15s;
+  }
+  .cta-btn:hover{transform:translateY(-2px);}
+  .cta-btn.fill{background:#0F0F12;color:var(--accent);}
+  .cta-btn.ghost{background:transparent;border:1.5px solid #0F0F12;color:#0F0F12;}
+  .cta .fine{font-size:12px;margin-top:14px;opacity:.7;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="pitch">
+    <div class="kicker">MARU TECH WING · Demo en vivo</div>
+    <h1>Así podría atender tu negocio en WhatsApp — 24/7, sin perder ni un cliente</h1>
+    <p>Elige tu sector y chatea con el bot como si fueras un cliente tuyo. Reserva una cita y mira cómo queda guardada, lista para que la abras por la mañana.</p>
+    <div class="niches" id="nicheButtons"></div>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="header">
+        <div class="avatar" id="avatar">💬</div>
+        <div class="info">
+          <div class="name" id="bizName">—</div>
+          <div class="status" id="status">en línea</div>
+        </div>
+        <div class="icons"><span>📹</span><span>📞</span><span>⋮</span></div>
+      </div>
+
+      <button class="owner-toggle" id="ownerToggle">💼 Что видит владелец</button>
+      <div class="owner" id="ownerPanel">
+        <h3>Calendario del negocio</h3>
+        <div class="sub">Сюда бот автоматически записывает каждую подтверждённую бронь. Владелец просто открывает список утром.</div>
+        <div id="bookings"><div class="empty">Пока нет записей. Сделай бронь в чате — и она появится здесь.</div></div>
+      </div>
+
+      <div class="chat" id="chat">
+        <div class="day-pill">Hoy</div>
+      </div>
+
+      <div class="inputbar">
+        <input id="input" type="text" placeholder="Escribe un mensaje" autocomplete="off">
+        <button class="send" id="sendBtn">➤</button>
+      </div>
+      <div class="demo-note">Демо-симулятор · так бот будет работать в настоящем WhatsApp</div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <h2>¿Quieres este bot para tu negocio?</h2>
+    <p>Bot de WhatsApp a medida, con tus servicios y precios — instalado en 3–5 días. Desde 300€.</p>
+    <div class="cta-row">
+      <a class="cta-btn fill" id="waLink" href="#" target="_blank" rel="noopener">💬 Escribir por WhatsApp</a>
+      <a class="cta-btn ghost" href="mailto:maruartti@gmail.com?subject=Quiero%20un%20bot%20de%20WhatsApp">✉️ Escribir un email</a>
+    </div>
+    <div class="fine">MARU TECH WING — landing pages, chatbots y asistentes de IA para negocios</div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  // === NEGOCIOS / NICHOS ===
+  // WhatsApp de contacto real: sustituye el número de placeholder por el tuyo.
+  var CONTACT_PHONE = '34600000000';
+
+  var NICHES = {
+    peluqueria: {
+      label: 'Peluquería',
+      name: 'Salón Bella',
+      avatar: '💇‍♀️',
+      greetName: 'Salón Bella',
+      services: [
+        {label:'Corte de mujer — 22€', name:'Corte de mujer', price:'22€'},
+        {label:'Color — 45€', name:'Color', price:'45€'},
+        {label:'Peinado — 20€', name:'Peinado', price:'20€'},
+        {label:'Manicura — 18€', name:'Manicura', price:'18€'}
+      ],
+      days: ['Jueves','Viernes','Sábado'],
+      times: {'Jueves':['10:00','13:30','17:00'],'Viernes':['11:00','16:00','18:30'],'Sábado':['10:30','12:00']},
+      address: 'Calle de la Luna 12, Valencia',
+      hours: 'Lun–Vie: 10:00–20:00\nSábado: 10:00–15:00\nDomingo: cerrado'
+    },
+    barberia: {
+      label: 'Barbería',
+      name: 'Barbería Lobo',
+      avatar: '💈',
+      greetName: 'Barbería Lobo',
+      services: [
+        {label:'Corte clásico — 15€', name:'Corte clásico', price:'15€'},
+        {label:'Fade / degradado — 18€', name:'Fade', price:'18€'},
+        {label:'Arreglo de barba — 10€', name:'Arreglo de barba', price:'10€'},
+        {label:'Corte + barba — 25€', name:'Corte + barba', price:'25€'}
+      ],
+      days: ['Miércoles','Viernes','Sábado'],
+      times: {'Miércoles':['11:00','17:30'],'Viernes':['12:00','16:00','19:00'],'Sábado':['10:00','11:30','13:00']},
+      address: 'Avenida del Puerto 34, Alicante',
+      hours: 'Mar–Sáb: 10:00–20:30\nLun y Dom: cerrado'
+    },
+    taller: {
+      label: 'Taller / Vinilado',
+      name: 'WrapLab Studio',
+      avatar: '🚗',
+      greetName: 'WrapLab Studio',
+      services: [
+        {label:'Vinilado completo — desde 1200€', name:'Vinilado completo', price:'desde 1200€'},
+        {label:'Cambio de color parcial — desde 400€', name:'Cambio de color parcial', price:'desde 400€'},
+        {label:'Protección de pintura (PPF) — desde 900€', name:'Protección PPF', price:'desde 900€'},
+        {label:'Tintado de lunas — 120€', name:'Tintado de lunas', price:'120€'}
+      ],
+      days: ['Lunes','Miércoles','Viernes'],
+      times: {'Lunes':['09:00','13:00'],'Miércoles':['09:30','15:00'],'Viernes':['10:00','12:30']},
+      address: 'Polígono Industrial Sur, Nave 7, Valencia',
+      hours: 'Lun–Vie: 09:00–18:00\nSábado y domingo: cerrado'
+    },
+    clinica: {
+      label: 'Clínica dental',
+      name: 'Clínica Dental Sonrisa',
+      avatar: '🦷',
+      greetName: 'Clínica Dental Sonrisa',
+      services: [
+        {label:'Revisión + limpieza — 40€', name:'Revisión + limpieza', price:'40€'},
+        {label:'Blanqueamiento — 150€', name:'Blanqueamiento', price:'150€'},
+        {label:'Consulta de ortodoncia — gratis', name:'Consulta de ortodoncia', price:'gratis'},
+        {label:'Urgencia dental — 60€', name:'Urgencia dental', price:'60€'}
+      ],
+      days: ['Martes','Jueves','Viernes'],
+      times: {'Martes':['09:30','12:00','17:00'],'Jueves':['10:00','16:30'],'Viernes':['09:00','11:30']},
+      address: 'Calle Mayor 8, Madrid',
+      hours: 'Lun–Vie: 09:00–19:00\nSábado: 10:00–13:00'
+    },
+    restaurante: {
+      label: 'Restaurante',
+      name: 'Restaurante El Rincón',
+      avatar: '🍽️',
+      greetName: 'Restaurante El Rincón',
+      services: [
+        {label:'Mesa para 2', name:'Mesa para 2', price:''},
+        {label:'Mesa para 4', name:'Mesa para 4', price:''},
+        {label:'Mesa para 6', name:'Mesa para 6', price:''},
+        {label:'Evento privado — consultar', name:'Evento privado', price:'consultar'}
+      ],
+      days: ['Viernes','Sábado','Domingo'],
+      times: {'Viernes':['20:00','21:30'],'Sábado':['14:00','20:00','21:30'],'Domingo':['14:00','15:30']},
+      address: 'Plaza del Rincón 3, Sevilla',
+      hours: 'Mar–Dom: 13:00–16:00 y 20:00–23:30\nLunes: cerrado'
+    }
+  };
+
+  var order = ['peluqueria','barberia','taller','clinica','restaurante'];
+
+  var chat = document.getElementById('chat');
+  var input = document.getElementById('input');
+  var sendBtn = document.getElementById('sendBtn');
+  var statusEl = document.getElementById('status');
+  var ownerToggle = document.getElementById('ownerToggle');
+  var ownerPanel = document.getElementById('ownerPanel');
+  var bookingsEl = document.getElementById('bookings');
+  var avatarEl = document.getElementById('avatar');
+  var bizNameEl = document.getElementById('bizName');
+  var nicheButtons = document.getElementById('nicheButtons');
+  var waLink = document.getElementById('waLink');
+
+  var current = null;
+  var state = {};
+  var typingEl = null;
+  var chipsEl = null;
+  var greetTimer = null;
+
+  function resetState(){
+    state = { step:'idle', service:null, price:null, day:null, time:null, bookings:[] };
+  }
+
+  function now(){
+    var d = new Date();
+    return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+  }
+  function scroll(){ chat.scrollTop = chat.scrollHeight; }
+  function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function addMsg(text, dir){
+    var m = document.createElement('div');
+    m.className = 'msg ' + dir;
+    m.innerHTML = escapeHtml(text) +
+      '<span class="meta">' + now() + (dir==='out' ? ' <span class="ticks">✓✓</span>' : '') + '</span>';
+    chat.appendChild(m);
+    scroll();
+  }
+  function showTyping(){
+    statusEl.textContent = 'escribiendo…';
+    typingEl = document.createElement('div');
+    typingEl.className = 'typing';
+    typingEl.innerHTML = '<span></span><span></span><span></span>';
+    chat.appendChild(typingEl);
+    scroll();
+  }
+  function hideTyping(){
+    statusEl.textContent = 'en línea';
+    if(typingEl){ typingEl.remove(); typingEl = null; }
+  }
+  function botSay(text, chips, delay){
+    showTyping();
+    setTimeout(function(){
+      hideTyping();
+      addMsg(text, 'in');
+      if(chips && chips.length){ addChips(chips); }
+    }, delay || 900);
+  }
+  function addChips(options){
+    removeChips();
+    chipsEl = document.createElement('div');
+    chipsEl.className = 'chips';
+    options.forEach(function(opt){
+      var b = document.createElement('button');
+      b.className = 'chip';
+      b.textContent = opt.label;
+      b.addEventListener('click', function(){ handleUser(opt.value || opt.label, opt.label); });
+      chipsEl.appendChild(b);
+    });
+    chat.appendChild(chipsEl);
+    scroll();
+  }
+  function removeChips(){ if(chipsEl){ chipsEl.remove(); chipsEl = null; } }
+
+  function mainMenuChips(){
+    return [
+      {label:'📅 Reservar', value:'__reservar'},
+      {label:'💬 Ver precios', value:'__precios'},
+      {label:'📍 Dirección y horario', value:'__direccion'}
+    ];
+  }
+
+  function fmtPriceSuffix(price){
+    return price ? ' (' + price + ')' : '';
+  }
+
+  function startBooking(){
+    state.step = 'service';
+    botSay('¡Genial! ¿Qué te gustaría reservar? 🙂',
+      current.services.map(function(s){ return {label:s.label, value:'__srv:'+s.name}; }));
+  }
+
+  function pricesMsg(){
+    var lines = current.services.map(function(s){ return '• ' + s.name + fmtPriceSuffix(s.price); }).join('\n');
+    botSay('Esto es lo que tenemos:\n\n' + lines + '\n\n¿Quieres reservar?',
+      [{label:'📅 Sí, reservar', value:'__reservar'},{label:'Ahora no', value:'__no'}]);
+  }
+
+  function addressMsg(){
+    botSay('📍 Estamos en ' + current.address + '.\n\n🕐 Horario:\n' + current.hours + '\n\n¿Te ayudo con algo más?',
+      mainMenuChips());
+  }
+
+  function confirmBooking(name){
+    var b = { name:name, service:state.service, price:state.price, day:state.day, time:state.time };
+    state.bookings.push(b);
+    renderBookings();
+    botSay('✅ ¡Listo, ' + name + '!\n\nTu reserva:\n' + state.service + fmtPriceSuffix(state.price) + '\n📅 ' + state.day + ' a las ' + state.time + '\n📍 ' + current.address + '\n\nTe enviaré un recordatorio el día antes. ¡Hasta pronto! 🙌',
+      [{label:'📅 Otra reserva', value:'__reservar'},{label:'Gracias 🙌', value:'__gracias'}], 1100);
+    state.step = 'idle';
+    state.service = state.price = state.day = state.time = null;
+    ownerToggle.style.background = '#008069';
+    setTimeout(function(){ ownerToggle.style.background = '#111B21'; }, 1600);
+  }
+
+  function renderBookings(){
+    if(!state.bookings.length){
+      bookingsEl.innerHTML = '<div class="empty">Пока нет записей. Сделай бронь в чате — и она появится здесь.</div>';
+      return;
+    }
+    bookingsEl.innerHTML = state.bookings.map(function(b){
+      return '<div class="booking"><b>' + b.day + ' ' + b.time + '</b> — ' + b.service + fmtPriceSuffix(b.price) +
+        '<br>Cliente: ' + escapeHtml(b.name) + ' · vía WhatsApp bot 🤖</div>';
+    }).join('');
+  }
+
+  function fallback(){
+    botSay('Perdona, no te he entendido bien 🙈 ¿Te ayudo con alguna de estas opciones?', mainMenuChips());
+  }
+
+  function handleFreeText(text){
+    var t = text.toLowerCase();
+    if(/(hola|buenas|hey|hi)/.test(t)){ greet(); return; }
+    if(/(reserv|cita|hueco|apunt|mesa)/.test(t)){ startBooking(); return; }
+    if(/(precio|cuánto|cuanto|tarifa|coste|vale)/.test(t)){ pricesMsg(); return; }
+    if(/(direcci|dónde|donde|horario|abr|ubicaci)/.test(t)){ addressMsg(); return; }
+    if(/(gracias|perfecto|vale|ok|genial)/.test(t)){
+      botSay('¡A ti! 🙌 Aquí estoy si necesitas algo más.', mainMenuChips());
+      return;
+    }
+    if(/(cancel|anular)/.test(t)){
+      botSay('Claro, para cancelar o cambiar tu reserva dime tu nombre y la fecha, y lo gestiono al momento 🙂');
+      return;
+    }
+    fallback();
+  }
+
+  function handleUser(value, label){
+    removeChips();
+    addMsg(label || value, 'out');
+
+    if(value === '__reservar'){ startBooking(); return; }
+    if(value === '__precios'){ pricesMsg(); return; }
+    if(value === '__direccion'){ addressMsg(); return; }
+    if(value === '__no'){ botSay('¡Sin problema! Escríbeme cuando quieras 😊', mainMenuChips()); return; }
+    if(value === '__gracias'){ botSay('¡A ti! Que tengas un día estupendo.', mainMenuChips()); return; }
+    if(value.indexOf('__srv:') === 0){
+      var srvName = value.slice(6);
+      var srv = current.services.find(function(s){ return s.name === srvName; });
+      state.service = srv.name; state.price = srv.price;
+      state.step = 'day';
+      botSay('¡Buena elección! ¿Qué día te viene bien?',
+        current.days.map(function(d){ return {label:'📅 ' + d, value:'__day:'+d}; }));
+      return;
+    }
+    if(value.indexOf('__day:') === 0){
+      state.day = value.slice(6);
+      state.step = 'time';
+      botSay('Para el ' + state.day.toLowerCase() + ' tengo estos huecos libres:',
+        current.times[state.day].map(function(t){ return {label:'🕐 ' + t, value:'__time:'+t}; }));
+      return;
+    }
+    if(value.indexOf('__time:') === 0){
+      state.time = value.slice(7);
+      state.step = 'name';
+      botSay('¡Perfecto! Para confirmar, ¿me dices tu nombre? ✍️');
+      return;
+    }
+
+    if(state.step === 'name'){
+      var name = value.trim();
+      if(name.length < 2){ botSay('¿Me repites tu nombre, porfa? 🙂'); return; }
+      confirmBooking(name.charAt(0).toUpperCase() + name.slice(1));
+      return;
+    }
+    handleFreeText(value);
+  }
+
+  function greet(){
+    botSay('¡Hola! 👋 Soy el asistente de ' + current.greetName + '.\n\nPuedo reservarte una cita, darte información sobre los precios o indicarte nuestra dirección. ¿En qué te ayudo?',
+      mainMenuChips(), 700);
+  }
+
+  function loadNiche(key){
+    if(greetTimer){ clearTimeout(greetTimer); greetTimer = null; }
+    current = NICHES[key];
+    resetState();
+    removeChips();
+    hideTyping();
+    chat.innerHTML = '<div class="day-pill">Hoy</div>';
+    ownerPanel.classList.remove('open');
+    avatarEl.textContent = current.avatar;
+    bizNameEl.textContent = current.name;
+    renderBookings();
+
+    Array.prototype.forEach.call(nicheButtons.children, function(btn){
+      btn.classList.toggle('active', btn.dataset.key === key);
+    });
+
+    var text = encodeURIComponent('¡Hola! He probado el bot de ' + current.label.toLowerCase() + ' y quiero uno para mi negocio.');
+    waLink.href = 'https://wa.me/' + CONTACT_PHONE + '?text=' + text;
+
+    greetTimer = setTimeout(function(){
+      addMsg('Hola! Quería información 😊', 'out');
+      greet();
+    }, 600);
+  }
+
+  order.forEach(function(key){
+    var btn = document.createElement('button');
+    btn.className = 'niche-btn';
+    btn.dataset.key = key;
+    btn.textContent = NICHES[key].label;
+    btn.addEventListener('click', function(){ loadNiche(key); });
+    nicheButtons.appendChild(btn);
+  });
+
+  sendBtn.addEventListener('click', function(){
+    var v = input.value.trim();
+    if(!v) return;
+    input.value = '';
+    handleUser(v);
+  });
+  input.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ sendBtn.click(); }
+  });
+  ownerToggle.addEventListener('click', function(){
+    ownerPanel.classList.toggle('open');
+  });
+  document.addEventListener('click', function(e){
+    if(ownerPanel.classList.contains('open') &&
+       !ownerPanel.contains(e.target) && e.target !== ownerToggle){
+      ownerPanel.classList.remove('open');
+    }
+  });
+
+  loadNiche(order[0]);
+})();
+</script>
+</body>
+</html>
