@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NOA — handmade jewelry · new capsule drop</title>
+<meta name="description" content="NOA — handmade jewelry in recycled silver and stones with a story. Capsule drops, careful worldwide shipping, −10% off your first order." />
+<meta property="og:title" content="NOA — handmade jewelry" />
+<meta property="og:description" content="A capsule collection of handmade jewelry. Limited drop, recycled silver, worldwide shipping." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#F7F2EA; --bg2:#EFE6D6; --surface:#FFFFFF;
+  --ink:#211B14; --ink-2:#6E6355; --ink-3:#A69B8A;
+  --accent:#C1583A; --accent-deep:#9C4128; --sage:#7C8A6C; --gold:#B08D57;
+  --line:#E4D9C6; --line-2:#D8CAB1;
+  --fd:'Fraunces',serif; --fb:'Inter',system-ui,sans-serif;
+  --r:20px; --r-lg:28px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#161310; --bg2:#1D1913; --surface:#211C16; --ink:#F4EEE3; --ink-2:#B7AB98; --ink-3:#867A69;
+    --accent:#E17853; --accent-deep:#F0906E; --sage:#93A281; --gold:#CBA96B; --line:#332C22; --line-2:#3D3527; }
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--fb); font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+.wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+a{color:inherit; text-decoration:none;}
+img{max-width:100%; display:block;}
+h1,h2,h3{font-family:var(--fd); font-weight:600; letter-spacing:-.01em; line-height:1.05; margin:0;}
+.eyebrow{font-family:var(--fb); font-weight:600; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent-deep);}
+p{margin:0;}
+.btn{display:inline-flex; align-items:center; gap:8px; font-family:var(--fb); font-weight:600; font-size:14.5px; padding:14px 26px; border-radius:40px; cursor:pointer; transition:transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease; border:1.5px solid transparent; white-space:nowrap;}
+.btn-fill{background:var(--ink); color:var(--bg);}
+.btn-fill:hover{transform:translateY(-2px); background:var(--accent-deep);}
+.btn-ghost{border-color:var(--ink); color:var(--ink);}
+.btn-ghost:hover{background:var(--ink); color:var(--bg);}
+.btn-sm{padding:10px 18px; font-size:13px;}
+section{padding:88px 0;}
+.sec-head{max-width:56ch; margin-bottom:44px;}
+.sec-head h2{font-size:clamp(30px,4.6vw,50px); margin-top:12px;}
+.sec-head p{color:var(--ink-2); margin:16px 0 0; font-size:16.5px;}
+.reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+.reveal.in{opacity:1; transform:translateY(0);}
+@media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+
+/* PHOTO PLACEHOLDER */
+.ph{position:relative; overflow:hidden; border-radius:var(--r); background:
+    repeating-linear-gradient(135deg, var(--bg2), var(--bg2) 12px, var(--surface) 12px, var(--surface) 24px);
+  border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--ink-3); width:100%;}
+.ph::after{content:attr(data-ph); position:absolute; left:14px; bottom:12px; font-family:var(--fb); font-weight:600; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-2); background:rgba(255,255,255,.75); padding:5px 10px; border-radius:20px; border:1px solid var(--line);}
+@media (prefers-color-scheme: dark){ .ph::after{background:rgba(0,0,0,.45);} }
+.ph svg{opacity:.35; width:34px; height:34px;}
+.ph-sq{aspect-ratio:1/1;} .ph-portrait{aspect-ratio:4/5;} .ph-tall{aspect-ratio:3/4;} .ph-wide{aspect-ratio:16/9;} .ph-hero{aspect-ratio:4/5;}
+
+/* HEADER */
+header{position:sticky; top:0; z-index:60; background:rgba(247,242,234,.86); backdrop-filter:blur(12px); border-bottom:1px solid transparent; transition:border-color .3s, padding .3s;}
+@media (prefers-color-scheme: dark){ header{background:rgba(22,19,16,.86);} }
+header.scrolled{border-color:var(--line);}
+.nav{display:flex; align-items:center; justify-content:space-between; height:76px;}
+.brand{font-family:var(--fd); font-weight:700; font-size:22px; letter-spacing:.02em;}
+.nav-links{display:flex; align-items:center; gap:28px;}
+.nav-links a{font-size:14.5px; font-weight:500; color:var(--ink-2); transition:color .15s;}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{display:flex; align-items:center; gap:12px;}
+.langsw{display:flex; gap:2px; border:1px solid var(--line); border-radius:30px; padding:3px;}
+.langsw a{font-size:12.5px; font-weight:700; color:var(--ink-2); padding:5px 11px; border-radius:20px;}
+.langsw a.on{background:var(--ink); color:var(--bg);}
+.burger{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px;}
+.burger span{width:22px; height:2px; background:var(--ink); display:block;}
+@media (max-width:820px){ .nav-links{display:none;} .burger{display:flex;} }
+
+/* ANNOUNCE BAR */
+.announce{background:var(--ink); color:var(--bg); overflow:hidden; padding:9px 0;}
+.announce-track{display:flex; white-space:nowrap; width:max-content; animation:scroll 22s linear infinite; gap:0;}
+.announce-track span{font-size:12.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; padding:0 20px; display:inline-flex; align-items:center; gap:20px;}
+.announce-track span::after{content:"·"; color:var(--accent);}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* HERO */
+.hero{position:relative; padding:64px 0 20px; overflow:hidden;}
+.blob{position:absolute; width:520px; height:520px; border-radius:50%; filter:blur(90px); opacity:.5; z-index:0; pointer-events:none;
+  background:radial-gradient(circle, rgba(193,88,58,.5), rgba(193,88,58,0) 70%); right:-160px; top:-120px; animation:float 15s ease-in-out infinite;}
+.blob.two{background:radial-gradient(circle, rgba(124,138,108,.4), rgba(124,138,108,0) 70%); left:-160px; bottom:-60px; animation-delay:-7s;}
+@keyframes float{0%,100%{transform:translate(0,0);}50%{transform:translate(-26px,26px);}}
+.hero-grid{position:relative; z-index:1; display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center;}
+@media (max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:36px;} }
+.hero h1{font-size:clamp(38px,6.4vw,68px); font-weight:600; max-width:14ch; margin:18px 0 0;}
+.hero h1 em{font-style:italic; color:var(--accent-deep);}
+.hero p{font-size:17px; color:var(--ink-2); max-width:48ch; margin:22px 0 30px;}
+.hero-cta{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:30px;}
+.trust-row{display:flex; align-items:center; gap:22px; flex-wrap:wrap; font-size:13.5px; color:var(--ink-2);}
+.stars{color:var(--gold); letter-spacing:1px;}
+.hero-media{position:relative;}
+.hero-media .ph-hero{width:100%;}
+.hero-badge{position:absolute; top:-16px; left:-16px; background:var(--surface); border:1px solid var(--line); border-radius:50%; width:96px; height:96px; display:flex; align-items:center; justify-content:center; text-align:center; font-family:var(--fd); font-weight:600; font-size:12px; line-height:1.2; box-shadow:0 14px 30px rgba(33,27,20,.14); transform:rotate(-8deg);}
+@media (max-width:900px){ .hero-badge{width:78px; height:78px; font-size:10.5px;} }
+.hero-mini{position:absolute; width:38%; right:-6%; bottom:-8%; box-shadow:0 20px 40px rgba(33,27,20,.18); border:4px solid var(--bg);}
+@media (max-width:900px){ .hero-mini{display:none;} }
+
+/* USP */
+.usp-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r); overflow:hidden;}
+@media (max-width:900px){ .usp-grid{grid-template-columns:repeat(2,1fr);} }
+.usp{background:var(--surface); padding:28px 24px;}
+.usp .ic{width:34px; height:34px; margin-bottom:14px; color:var(--accent-deep);}
+.usp h4{font-family:var(--fb); font-weight:700; font-size:15px; margin:0 0 6px;}
+.usp p{font-size:13.5px; color:var(--ink-2); line-height:1.5;}
+
+/* SHOP GRID */
+.shop-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+@media (max-width:900px){ .shop-grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:560px){ .shop-grid{grid-template-columns:1fr;} }
+.product{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); overflow:hidden; transition:transform .2s ease, box-shadow .2s ease;}
+.product:hover{transform:translateY(-4px); box-shadow:0 20px 40px rgba(33,27,20,.1);}
+.product .ph{border-radius:0; border:0; border-bottom:1px solid var(--line);}
+.tag{position:absolute; top:12px; left:12px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:5px 10px; border-radius:20px; z-index:2;}
+.product-body{padding:18px 18px 20px;}
+.product-body h4{font-family:var(--fd); font-weight:600; font-size:18px; margin:0 0 4px;}
+.product-body .sub{font-size:12.5px; color:var(--ink-3); margin-bottom:10px;}
+.product-foot{display:flex; align-items:center; justify-content:space-between; margin-top:10px;}
+.price{font-weight:700; font-size:16px;}
+.addbtn{border:1.5px solid var(--ink); background:none; color:var(--ink); border-radius:30px; padding:9px 16px; font-family:var(--fb); font-weight:600; font-size:13px; cursor:pointer; transition:.15s;}
+.addbtn:hover{background:var(--ink); color:var(--bg);}
+.shop-cta{text-align:center; margin-top:36px;}
+.toast{position:fixed; left:50%; bottom:28px; transform:translate(-50%,140%); background:var(--ink); color:var(--bg); padding:13px 22px; border-radius:30px; font-size:14px; font-weight:500; z-index:200; transition:transform .3s ease; box-shadow:0 14px 30px rgba(0,0,0,.2);}
+.toast.on{transform:translate(-50%,0);}
+
+/* LOOK / HOTSPOTS */
+.look-wrap{position:relative; border-radius:var(--r-lg); overflow:hidden;}
+.look-wrap .ph{border-radius:0; aspect-ratio:16/8;}
+.dot{position:absolute; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.92); border:2px solid var(--ink); display:flex; align-items:center; justify-content:center; font-family:var(--fb); font-weight:700; font-size:13px; cursor:pointer; box-shadow:0 6px 16px rgba(0,0,0,.2); transform:translate(-50%,-50%);}
+.dot::before{content:""; position:absolute; inset:-6px; border-radius:50%; border:2px solid rgba(255,255,255,.7); animation:pulse2 2.2s ease-out infinite;}
+@keyframes pulse2{0%{transform:scale(.8); opacity:.8;}100%{transform:scale(1.7); opacity:0;}}
+.dot-card{position:absolute; z-index:10; width:216px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; box-shadow:0 18px 40px rgba(0,0,0,.18); display:none; transform:translate(-50%,14px);}
+.dot-card.on{display:block;}
+.dot-card h5{font-family:var(--fd); font-size:15px; font-weight:600; margin:0 0 3px;}
+.dot-card .price{font-size:14px;}
+
+/* ABOUT */
+.about-grid{display:grid; grid-template-columns:.9fr 1.1fr; gap:56px; align-items:center;}
+@media (max-width:900px){ .about-grid{grid-template-columns:1fr; gap:32px;} }
+.about-grid .ph{aspect-ratio:4/5;}
+.about-text p{font-size:16.5px; color:var(--ink-2); margin-bottom:16px;}
+.signature{font-family:var(--fd); font-style:italic; font-size:19px; margin-top:18px;}
+
+/* VALUES */
+.values-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+@media (max-width:820px){ .values-grid{grid-template-columns:1fr;} }
+.value{padding:30px 26px; border:1px solid var(--line); border-radius:var(--r); background:var(--surface);}
+.value .no{font-family:var(--fd); font-size:13px; color:var(--accent-deep); font-weight:600; letter-spacing:.1em;}
+.value h4{font-size:19px; margin:12px 0 8px;}
+.value p{font-size:14.5px; color:var(--ink-2);}
+
+/* REVIEWS */
+.rev-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:44px;}
+@media (max-width:900px){ .rev-grid{grid-template-columns:1fr;} }
+.rev{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:24px;}
+.rev .stars{display:block; margin-bottom:12px;}
+.rev p{font-size:14.5px; color:var(--ink-2); margin-bottom:16px;}
+.rev .who{font-size:13px; font-weight:700;}
+.ugc-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:10px;}
+@media (max-width:820px){ .ugc-grid{grid-template-columns:repeat(3,1fr);} }
+.ugc-grid .ph{aspect-ratio:1/1; border-radius:14px;}
+.ugc-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:8px;}
+.ugc-head h3{font-family:var(--fd); font-size:22px;}
+.ugc-head span{color:var(--ink-2); font-size:14px;}
+
+/* FAQ */
+.faq{max-width:760px;}
+.faq details{border-bottom:1px solid var(--line); padding:20px 0;}
+.faq summary{cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; font-family:var(--fd); font-weight:600; font-size:17px;}
+.faq summary::-webkit-details-marker{display:none;}
+.faq summary::after{content:"+"; font-size:22px; color:var(--accent-deep); transition:transform .2s;}
+.faq details[open] summary::after{transform:rotate(45deg);}
+.faq p{color:var(--ink-2); margin-top:12px; font-size:15px; max-width:60ch;}
+
+/* NEWSLETTER */
+.join{background:var(--ink); color:var(--bg); border-radius:var(--r-lg); padding:60px 48px; text-align:center;}
+@media (max-width:640px){ .join{padding:44px 24px;} }
+.join h2{font-size:clamp(28px,4.2vw,42px); color:var(--bg);}
+.join p{color:#C9C0AE; max-width:52ch; margin:16px auto 26px; font-size:15.5px;}
+.join-form{display:flex; gap:10px; max-width:420px; margin:0 auto; flex-wrap:wrap; justify-content:center;}
+.join-form input{flex:1; min-width:220px; padding:14px 18px; border-radius:30px; border:1.5px solid #443C31; background:#241F19; color:var(--bg); font-family:var(--fb); font-size:14.5px;}
+.join-form input::placeholder{color:#8A8071;}
+.join-form input:focus{outline:none; border-color:var(--accent);}
+.join-form button{background:var(--accent); color:#fff; border:none; border-radius:30px; padding:14px 22px; font-family:var(--fb); font-weight:700; font-size:14px; cursor:pointer; transition:.15s;}
+.join-form button:hover{background:var(--accent-deep);}
+.join-note{font-size:12px; color:#8A8071; margin-top:14px;}
+.join-ok{display:none; color:var(--bg); font-size:14.5px; margin-top:16px;}
+.join-ok.on{display:block;}
+
+/* FOOTER */
+footer{padding:56px 0 26px; border-top:1px solid var(--line);}
+.foot{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px; margin-bottom:36px;}
+@media (max-width:820px){ .foot{grid-template-columns:1fr 1fr; row-gap:28px;} }
+.foot .brand{display:block; margin-bottom:10px;}
+.foot p{color:var(--ink-2); font-size:14px; max-width:32ch;}
+.foot h5{font-family:var(--fb); font-weight:700; font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin:0 0 12px;}
+.foot a.fl{display:block; color:var(--ink-2); font-size:14.5px; margin-bottom:9px;}
+.foot a.fl:hover{color:var(--ink);}
+.foot-bottom{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; padding-top:22px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-3);}
+.foot-bottom a{color:var(--ink-3);}
+.foot-bottom a:hover{color:var(--ink);}
+
+/* CHAT WIDGET */
+.chat-fab{position:fixed; right:20px; bottom:20px; z-index:150; width:58px; height:58px; border-radius:50%; background:var(--ink); color:var(--bg); border:none; cursor:pointer; box-shadow:0 14px 30px rgba(0,0,0,.24); display:flex; align-items:center; justify-content:center; transition:transform .18s;}
+.chat-fab:hover{transform:scale(1.06);}
+.chat-panel{position:fixed; right:20px; bottom:88px; z-index:150; width:300px; max-width:calc(100vw - 40px); background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:0 24px 50px rgba(0,0,0,.22); overflow:hidden; display:none; flex-direction:column;}
+.chat-panel.on{display:flex;}
+.chat-head{background:var(--ink); color:var(--bg); padding:14px 16px; font-family:var(--fd); font-weight:600; font-size:14.5px; display:flex; align-items:center; gap:10px;}
+.chat-head .dot2{width:8px; height:8px; border-radius:50%; background:var(--sage);}
+.chat-body{padding:16px; display:flex; flex-direction:column; gap:10px;}
+.chat-bubble{background:var(--bg2); border-radius:14px; border-bottom-left-radius:4px; padding:11px 14px; font-size:13.5px; line-height:1.45; max-width:90%;}
+.chat-chips{display:flex; flex-direction:column; gap:8px; padding:0 16px 16px;}
+.chat-chip{border:1.5px solid var(--line); background:none; border-radius:12px; padding:10px 12px; font-family:var(--fb); font-size:13px; text-align:left; cursor:pointer; color:var(--ink);}
+.chat-chip:hover{border-color:var(--accent); color:var(--accent-deep);}
+</style>
+</head>
+<body>
+
+<div class="announce">
+  <div class="announce-track">
+    <span><span>Free shipping over €60</span><span>Handmade</span><span>−10% off your first order with code NOA10</span><span>Worldwide shipping</span></span>
+    <span><span>Free shipping over €60</span><span>Handmade</span><span>−10% off your first order with code NOA10</span><span>Worldwide shipping</span></span>
+  </div>
+</div>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a href="#top" class="brand">NOA</a>
+    <nav class="nav-links">
+      <a href="#shop">Collection</a>
+      <a href="#about">About</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faq">FAQ</a>
+      <a href="#join">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <div class="langsw"><a href="noa.html">ES</a><a href="noa-en.html" class="on">EN</a></div>
+      <a href="#shop" class="btn btn-fill btn-sm">Shop</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="top">
+    <div class="blob"></div>
+    <div class="blob two"></div>
+    <div class="wrap hero-grid">
+      <div class="reveal in">
+        <span class="eyebrow">New capsule · 40 pieces</span>
+        <h1>Jewelry you <em>recognize</em> yourself in.</h1>
+        <p>Handmade in recycled 925 silver, with stones that carry a story. Every capsule is up to 40 pieces — once they're gone, the next drop is a while off.</p>
+        <div class="hero-cta">
+          <a href="#shop" class="btn btn-fill">Shop the collection →</a>
+          <a href="#about" class="btn btn-ghost">About the brand</a>
+        </div>
+        <div class="trust-row">
+          <span><span class="stars">★★★★★</span> 4.9 out of 5 · 1,200+ reviews</span>
+          <span>A studio, not a factory</span>
+        </div>
+      </div>
+      <div class="hero-media reveal in">
+        <div class="hero-badge">Capsule<br>No. 04<br>in stock</div>
+        <div class="ph ph-hero" data-ph="1200×1500 · hero shot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-9 9"/></svg></div>
+        <div class="ph hero-mini ph-sq" data-ph="600×600 · detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-9 9"/></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="usp-sec">
+    <div class="wrap">
+      <div class="usp-grid reveal">
+        <div class="usp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2z"/></svg>
+          <h4>Handmade</h4>
+          <p>Every piece is assembled by hand in the studio, one at a time — never off a line.</p>
+        </div>
+        <div class="usp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4v6h6M20 20v-6h-6"/><path d="M20 10a8 8 0 00-14.6-4.4M4 14a8 8 0 0014.6 4.4"/></svg>
+          <h4>Recycled materials</h4>
+          <p>925 silver from recycled stock, stones sourced from vetted suppliers.</p>
+        </div>
+        <div class="usp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="7" width="20" height="12" rx="2"/><path d="M2 11h20M6 15h4"/></svg>
+          <h4>Free shipping over €60</h4>
+          <p>Worldwide, with tracking and packaging that's part of the gift.</p>
+        </div>
+        <div class="usp">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 12a9 9 0 109-9"/><path d="M3 4v6h6"/></svg>
+          <h4>30-day returns</h4>
+          <p>Doesn't fit? Full refund within 30 days, no hassle.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="shop">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Capsule #04 · in stock</span>
+        <h2>Choose before it's gone</h2>
+        <p>40 pieces make up the whole drop. Each one numbered by hand.</p>
+      </div>
+      <div class="shop-grid" id="shopGrid">
+        <div class="product reveal">
+          <div style="position:relative"><span class="tag">Bestseller</span><div class="ph ph-portrait" data-ph="800×1000"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+          <div class="product-body">
+            <h4>«Nudo» ring</h4>
+            <div class="sub">925 silver, adjustable size</div>
+            <div class="product-foot"><span class="price">€49</span><button class="addbtn" data-name="«Nudo» ring" data-price="€49">Add to bag</button></div>
+          </div>
+        </div>
+        <div class="product reveal">
+          <div style="position:relative"><span class="tag">New</span><div class="ph ph-portrait" data-ph="800×1000"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+          <div class="product-body">
+            <h4>«Onda» chain</h4>
+            <div class="sub">925 silver, 45 cm</div>
+            <div class="product-foot"><span class="price">€64</span><button class="addbtn" data-name="«Onda» chain" data-price="€64">Add to bag</button></div>
+          </div>
+        </div>
+        <div class="product reveal">
+          <div style="position:relative"><div class="ph ph-portrait" data-ph="800×1000"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+          <div class="product-body">
+            <h4>«Gota» earrings</h4>
+            <div class="sub">925 silver, moonstone</div>
+            <div class="product-foot"><span class="price">€52</span><button class="addbtn" data-name="«Gota» earrings" data-price="€52">Add to bag</button></div>
+          </div>
+        </div>
+        <div class="product reveal">
+          <div style="position:relative"><div class="ph ph-portrait" data-ph="800×1000"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+          <div class="product-body">
+            <h4>«Hilo» bracelet</h4>
+            <div class="sub">925 silver, braided</div>
+            <div class="product-foot"><span class="price">€38</span><button class="addbtn" data-name="«Hilo» bracelet" data-price="€38">Add to bag</button></div>
+          </div>
+        </div>
+        <div class="product reveal">
+          <div style="position:relative"><span class="tag">New</span><div class="ph ph-portrait" data-ph="800×1000"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+          <div class="product-body">
+            <h4>«Luna» pendant</h4>
+            <div class="sub">925 silver, spinel</div>
+            <div class="product-foot"><span class="price">€71</span><button class="addbtn" data-name="«Luna» pendant" data-price="€71">Add to bag</button></div>
+          </div>
+        </div>
+        <div class="product reveal">
+          <div style="position:relative"><span class="tag">Top pick</span><div class="ph ph-portrait" data-ph="800×1000"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></div></div>
+          <div class="product-body">
+            <h4>«Cápsula» set</h4>
+            <div class="sub">Ring + chain + earrings</div>
+            <div class="product-foot"><span class="price">€120</span><button class="addbtn" data-name="«Cápsula» set" data-price="€120">Add to bag</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="shop-cta reveal"><a href="https://t.me/Maruartspace" target="_blank" rel="noopener" class="btn btn-ghost">See the full catalog →</a></div>
+    </div>
+  </section>
+
+  <section id="look" style="background:var(--bg2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Look book</span>
+        <h2>Shop the look</h2>
+        <p>Tap the dots on the photo to see each piece up close.</p>
+      </div>
+      <div class="look-wrap reveal">
+        <div class="ph" data-ph="1600×800 · full look"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-9 9"/></svg></div>
+        <button class="dot" style="left:28%; top:38%;" data-dot="1">1</button>
+        <button class="dot" style="left:52%; top:64%;" data-dot="2">2</button>
+        <button class="dot" style="left:74%; top:30%;" data-dot="3">3</button>
+        <div class="dot-card" id="dotcard1" style="left:28%; top:38%;"><h5>«Gota» earrings</h5><div class="price">€52</div></div>
+        <div class="dot-card" id="dotcard2" style="left:52%; top:64%;"><h5>«Nudo» ring</h5><div class="price">€49</div></div>
+        <div class="dot-card" id="dotcard3" style="left:74%; top:30%;"><h5>«Onda» chain</h5><div class="price">€64</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about-grid">
+      <div class="ph ph-tall reveal" data-ph="900×1125 · founder"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>
+      <div class="about-text reveal">
+        <span class="eyebrow">About the brand</span>
+        <h2 style="margin:14px 0 20px; font-size:clamp(28px,4vw,42px);">It started with a ring I made for myself</h2>
+        <p>NOA started with a ring I made for myself. Six months later friends were asking about it; a year in, orders were coming in from other cities.</p>
+        <p>Today NOA is a small studio where every piece passes through the same hands, from sketch to polish. No assembly line, no shortcuts on materials.</p>
+        <div class="signature">— founder of NOA</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--bg2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Values</span>
+        <h2>Why it's worth the price</h2>
+      </div>
+      <div class="values-grid reveal">
+        <div class="value"><div class="no">01</div><h4>Materials with a story</h4><p>Recycled silver and lab-grown stones — no harm to mines, no waste to spare.</p></div>
+        <div class="value"><div class="no">02</div><h4>Honest pricing</h4><p>You pay for material and craft, not a brand markup or an ad budget.</p></div>
+        <div class="value"><div class="no">03</div><h4>Transparent production</h4><p>Our studio is based in Spain. Every step, from sketch to shipping, is on our stories.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Reviews</span>
+        <h2>What people who already wear it say</h2>
+      </div>
+      <div class="rev-grid reveal">
+        <div class="rev"><span class="stars">★★★★★</span><p>"I've had the ring on for two weeks straight. The size is perfect and the silver hasn't tarnished."</p><div class="who">Maria G.</div></div>
+        <div class="rev"><span class="stars">★★★★★</span><p>"Ordered it as a gift — the packaging was a gift in itself. Arrived three days early."</p><div class="who">Alina R.</div></div>
+        <div class="rev"><span class="stars">★★★★★</span><p>"Wrote in with a sizing question and got a reply in ten minutes. Rare service these days."</p><div class="who">Daria V.</div></div>
+      </div>
+      <div class="ugc-head reveal"><h3>#NOAstyle</h3><span>Your photos wearing NOA</span></div>
+      <div class="ugc-grid reveal">
+        <div class="ph" data-ph="600×600"></div>
+        <div class="ph" data-ph="600×600"></div>
+        <div class="ph" data-ph="600×600"></div>
+        <div class="ph" data-ph="600×600"></div>
+        <div class="ph" data-ph="600×600"></div>
+        <div class="ph" data-ph="600×600"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="background:var(--bg2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">FAQ</span>
+        <h2>Frequently asked questions</h2>
+      </div>
+      <div class="faq reveal">
+        <details><summary>How do I care for my jewelry?</summary><p>Take it off before showering, sleeping or working out. Store it in the pouch, away from other pieces, and polish with a soft cloth once a month.</p></details>
+        <details><summary>How long does shipping take?</summary><p>2–4 days within Spain, 7–14 days worldwide. Your tracking number arrives as soon as the order ships.</p></details>
+        <details><summary>Can I return or exchange it?</summary><p>Yes, within 30 days of delivery, as long as it's unworn and the packaging is intact.</p></details>
+        <details><summary>Do you make custom pieces?</summary><p>Yes. For a custom order, message us on Telegram — we'll talk stone, size and timeline.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="join">
+    <div class="wrap">
+      <div class="join reveal">
+        <span class="eyebrow" style="color:var(--accent);">Newsletter</span>
+        <h2>Don't miss the next capsule</h2>
+        <p>Subscribe for −10% off your first order, plus early access to every new drop 24 hours before anyone else.</p>
+        <form class="join-form" id="joinForm">
+          <input type="email" required placeholder="Your email" aria-label="Email" />
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="join-ok" id="joinOk">Done! Check your inbox — your code is already there.</div>
+        <p class="join-note">Portfolio demo form: on a real project this connects to any newsletter tool, by email or Telegram.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <span class="brand">NOA</span>
+        <p>Handmade jewelry in recycled silver. Capsule drops, shipped worldwide.</p>
+      </div>
+      <div>
+        <h5>Shop</h5>
+        <a class="fl" href="#shop">Collection</a>
+        <a class="fl" href="#look">Look book</a>
+        <a class="fl" href="#reviews">Reviews</a>
+      </div>
+      <div>
+        <h5>Studio</h5>
+        <a class="fl" href="#about">About</a>
+        <a class="fl" href="#faq">Care & shipping</a>
+        <a class="fl" href="#faq">Returns & exchanges</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a class="fl" href="https://t.me/Maruartspace" target="_blank" rel="noopener">Telegram</a>
+        <a class="fl" href="mailto:hello@noa-jewelry.com">hello@noa-jewelry.com</a>
+        <a class="fl" href="https://instagram.com/maru.art.space" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 NOA — conceptual demo by MARU TECH WING studio · fictitious data</span>
+      <a href="index.html">Made by MARU TECH WING →</a>
+    </div>
+  </div>
+</footer>
+
+<button class="chat-fab" id="chatFab" aria-label="AI stylist">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.5 8.5 0 01-12.4 7.55L3 20l1.05-5.4A8.5 8.5 0 1121 11.5z"/></svg>
+</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head"><span class="dot2"></span> NOA AI stylist</div>
+  <div class="chat-body">
+    <div class="chat-bubble">Hi! I can help you find a piece for your look or budget 💬</div>
+  </div>
+  <div class="chat-chips">
+    <button class="chat-chip" data-scroll="#shop">Show the full collection</button>
+    <button class="chat-chip" data-scroll="#look">Build a look</button>
+    <a class="chat-chip" href="https://t.me/Maruartspace" target="_blank" rel="noopener" style="display:block">Message us on Telegram</a>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var hdr = document.getElementById('hdr');
+  addEventListener('scroll', function(){ hdr.classList.toggle('scrolled', scrollY > 10); });
+
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  var toast = document.getElementById('toast'), toastTimer;
+  document.querySelectorAll('.addbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      toast.textContent = 'Added: ' + b.dataset.name + ' · ' + b.dataset.price;
+      toast.classList.add('on');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ toast.classList.remove('on'); }, 2600);
+    });
+  });
+
+  document.querySelectorAll('.dot').forEach(function(d){
+    d.addEventListener('click', function(){
+      var id = 'dotcard' + d.dataset.dot;
+      document.querySelectorAll('.dot-card').forEach(function(c){ if(c.id !== id) c.classList.remove('on'); });
+      document.getElementById(id).classList.toggle('on');
+    });
+  });
+
+  var chatFab = document.getElementById('chatFab'), chatPanel = document.getElementById('chatPanel');
+  chatFab.addEventListener('click', function(){ chatPanel.classList.toggle('on'); });
+  document.querySelectorAll('.chat-chip[data-scroll]').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelector(c.dataset.scroll).scrollIntoView({behavior:'smooth'});
+      chatPanel.classList.remove('on');
+    });
+  });
+
+  var joinForm = document.getElementById('joinForm'), joinOk = document.getElementById('joinOk');
+  joinForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    joinForm.style.display = 'none';
+    joinOk.classList.add('on');
+  });
+})();
+</script>
+</body>
+</html>
