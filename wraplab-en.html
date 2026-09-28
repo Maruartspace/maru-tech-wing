@@ -73,6 +73,7 @@ nav.scrolled{background:rgba(10,11,13,.96)}
 .hero-car{position:relative;z-index:2}
 .hero-car .carimg{width:114%;max-width:none;margin-left:-7%;filter:drop-shadow(0 46px 42px rgba(0,0,0,.6));transform:translateX(165%);animation:driveIn 1.5s cubic-bezier(.16,.82,.24,1) .2s forwards}
 @media(max-width:900px){.hero-car .carimg{width:100%;margin-left:0}}
+.hero-car.pending .carimg,.hero-car.pending .speed{animation-play-state:paused}
 @keyframes driveIn{0%{transform:translateX(165%)}80%{transform:translateX(-2.5%)}100%{transform:translateX(0)}}
 .speed{position:absolute;right:-20%;height:3px;border-radius:3px;background:linear-gradient(270deg,transparent,var(--accent));z-index:1;opacity:0}
 .speed.s1{width:240px;top:34%;animation:streak 1.1s .1s ease-out}
@@ -289,7 +290,7 @@ html[lang="es"] .sw:nth-child(8) span::after{content:"08 · Tornasol"}
           <div class="hf"><b>2 years</b>warranty</div>
         </div>
       </div>
-      <div class="hero-car">
+      <div class="hero-car"><script>(function(c){if(innerWidth>900||!("IntersectionObserver" in window))return;c.classList.add("pending");var t=[];for(var i=0;i<=20;i++)t.push(i/20);var io=new IntersectionObserver(function(e){var r=e[e.length-1];if(r.boundingClientRect.height>40&&r.intersectionRatio>=.6){c.classList.remove("pending");io.disconnect()}},{threshold:t});io.observe(c);addEventListener("load",function(){if(c.classList.contains("pending")){io.disconnect();io.observe(c)}})})(document.currentScript.parentNode)</script>
         <div class="speed s1"></div><div class="speed s2"></div><div class="speed s3"></div>
         <img class="carimg" id="heroCar" alt="RAM TRX">
         <div class="spec a1"><span class="lbl"><span class="dot"></span>01 · GLOSS FILM</span></div>
