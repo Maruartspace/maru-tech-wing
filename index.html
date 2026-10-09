@@ -526,9 +526,9 @@
           <p class="lead" data-en="Assistants that answer questions, take bookings and reply on WhatsApp – around the clock."
              data-es="Asistentes que responden preguntas, gestionan reservas y contestan por WhatsApp – a cualquier hora.">Assistants that answer questions, take bookings and reply on WhatsApp – around the clock.</p>
           <ul class="bots">
-          <li><a href="https://maruartspace.github.io/maru-tech-wing/aura.html" target="_blank" rel="noopener"><strong>AURA</strong><span data-en="Booking bot for a barbershop, with its landing page" data-es="Bot de reservas para una barbería, con su landing">Booking bot for a barbershop, with its landing page</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
-          <li><a href="https://maruartspace.github.io/maru-tech-wing/groom.html" target="_blank" rel="noopener"><strong>Groom</strong><span data-en="Telegram booking bot for a grooming studio" data-es="Bot de reservas en Telegram para una peluquería canina">Telegram booking bot for a grooming studio</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
-          <li><a href="https://maruartspace.github.io/maru-tech-wing/bot-salon-demo.html" target="_blank" rel="noopener"><strong>Salon Luna</strong><span data-en="WhatsApp booking assistant for a beauty salon" data-es="Asistente de reservas por WhatsApp para un salón de belleza">WhatsApp booking assistant for a beauty salon</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+          <li><a class="langlink" href="https://maruartspace.github.io/maru-tech-wing/aura.html" target="_blank" rel="noopener"><strong>AURA</strong><span data-en="Booking bot for a barbershop, with its landing page" data-es="Bot de reservas para una barbería, con su landing">Booking bot for a barbershop, with its landing page</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+          <li><a class="langlink" href="https://maruartspace.github.io/maru-tech-wing/groom.html" target="_blank" rel="noopener"><strong>Groom</strong><span data-en="Telegram booking bot for a grooming studio" data-es="Bot de reservas en Telegram para una peluquería canina">Telegram booking bot for a grooming studio</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+          <li><a class="langlink" href="https://maruartspace.github.io/maru-tech-wing/bot-salon-demo.html" target="_blank" rel="noopener"><strong>Salon Luna</strong><span data-en="WhatsApp booking assistant for a beauty salon" data-es="Asistente de reservas por WhatsApp para un salón de belleza">WhatsApp booking assistant for a beauty salon</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
           </ul>
         </div>
         <div class="chat">
@@ -765,6 +765,17 @@ window.addEventListener('load', function(){
     curLang = lang;
     if (chatOn) chatPlay(); else chatStatic();
     asstReset();
+    // the address bar shows the language: ?lang=es for Spanish, clean address for English
+    try {
+      var u = new URL(window.location.href);
+      if (lang === 'es') u.searchParams.set('lang', 'es'); else u.searchParams.delete('lang');
+      history.replaceState(null, '', u.pathname + u.search + u.hash);
+    } catch (e) {}
+    // bot demos open in the same language
+    document.querySelectorAll('a.langlink').forEach(function(a){
+      var base = a.getAttribute('href').split('?')[0];
+      a.setAttribute('href', lang === 'es' ? base + '?lang=es' : base);
+    });
   }
 
   /* ---------- chat demo: a scripted booking dialogue (not a live bot) ---------- */
@@ -862,6 +873,8 @@ window.addEventListener('load', function(){
   }
   railFit();
   window.addEventListener('resize', function(){ railFit(); if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh(); });
+  // a link with ?lang=es opens the site in Spanish
+  try { if (new URLSearchParams(window.location.search).get('lang') === 'es') setLang('es'); } catch (e) {}
   document.getElementById('langEn').addEventListener('click', function(){ setLang('en'); });
   document.getElementById('langEs').addEventListener('click', function(){ setLang('es'); });
 

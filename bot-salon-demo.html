@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Salón Belleza Luna — Demo Bot WhatsApp</title>
+<title>Salón Belleza Luna – WhatsApp bot demo</title>
 <style>
   :root{
     --wa-green-dark:#075E54;
@@ -217,39 +217,125 @@
     padding:6px 0 2px;
     background:#F0F2F5;
   }
+  /* language switch */
+  .lang{position:fixed; top:12px; right:12px; z-index:20; display:inline-flex; background:#1f2c33; border-radius:20px; padding:3px;}
+  .lang button{font:600 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; letter-spacing:.04em; color:#aebac1; background:transparent; border:0; border-radius:16px; padding:7px 11px; cursor:pointer;}
+  .lang button.on{background:#008069; color:#fff;}
+  @media (max-width:480px){ .lang{top:auto; bottom:12px; right:50%; transform:translateX(50%);} body{align-items:flex-start;} .phone{height:calc(100vh - 80px); height:calc(100dvh - 80px);} }
 </style>
 </head>
 <body>
+<div class="lang" role="group" aria-label="Language"><button type="button" data-l="en" class="on">EN</button><button type="button" data-l="es">ES</button></div>
 <div class="phone">
   <div class="header">
     <div class="avatar">💅</div>
     <div class="info">
       <div class="name">Salón Belleza Luna</div>
-      <div class="status" id="status">en línea</div>
+      <div class="status" id="status">online</div>
     </div>
     <div class="icons"><span>📹</span><span>📞</span><span>⋮</span></div>
   </div>
 
-  <button class="owner-toggle" id="ownerToggle">💼 Что видит заказчик</button>
+  <button class="owner-toggle" id="ownerToggle">💼 What the owner sees</button>
   <div class="owner" id="ownerPanel">
-    <h3>Календарь салона (Google Calendar)</h3>
-    <div class="sub">Сюда бот автоматически записывает каждую подтверждённую бронь. Владелица просто открывает календарь утром.</div>
-    <div id="bookings"><div class="empty">Пока нет записей. Сделай бронь в чате — и она появится здесь.</div></div>
+    <h3 id="ownerTitle">Salon calendar (Google Calendar)</h3>
+    <div class="sub" id="ownerSub"></div>
+    <div id="bookings"></div>
   </div>
 
-  <div class="chat" id="chat">
-    <div class="day-pill">Hoy</div>
-  </div>
+  <div class="chat" id="chat"></div>
 
   <div class="inputbar">
-    <input id="input" type="text" placeholder="Escribe un mensaje" autocomplete="off">
-    <button class="send" id="sendBtn">➤</button>
+    <input id="input" type="text" placeholder="Type a message" autocomplete="off">
+    <button class="send" id="sendBtn" aria-label="Send">➤</button>
   </div>
-  <div class="demo-note">Демо-симулятор · так бот будет работать в настоящем WhatsApp</div>
+  <div class="demo-note" id="demoNote"></div>
 </div>
 
 <script>
 (function(){
+
+function getLang(){ try{ return new URLSearchParams(location.search).get('lang')==='es' ? 'es' : 'en'; }catch(e){ return 'en'; } }
+function putLang(l){ try{ var u=new URL(location.href); if(l==='es') u.searchParams.set('lang','es'); else u.searchParams.delete('lang'); history.replaceState(null,'',u.pathname+u.search+u.hash); }catch(e){} }
+
+  const T = {
+    en:{
+      title:'Salón Belleza Luna – WhatsApp bot demo',
+      online:'online', typing:'typing…', today:'Today', placeholder:'Type a message', send:'Send',
+      ownerBtn:'💼 What the owner sees', ownerTitle:'Salon calendar (Google Calendar)',
+      ownerSub:'The bot adds every confirmed booking here automatically. The owner just opens the calendar in the morning.',
+      empty:'No bookings yet. Make one in the chat and it will appear here.',
+      demoNote:'Demo simulator · this is how the bot works in real WhatsApp',
+      client:'Client', via:'via WhatsApp bot',
+      services:[
+        {label:'Manicure – 18€', name:'Manicure', price:'18€'},
+        {label:'Pedicure – 25€', name:'Pedicure', price:'25€'},
+        {label:'Mani + Pedi – 38€', name:'Manicure + Pedicure', price:'38€'},
+        {label:'Gel nails – 35€', name:'Gel nails', price:'35€'}
+      ],
+      days:['Thursday','Friday','Saturday'],
+      menu:['📅 Book an appointment','💅 See prices','📍 Address & hours'],
+      opening:'Hi! I\'d like some information 😊',
+      greet:'Hi! 👋 I\'m the assistant of Salón Belleza Luna.\n\nI can book an appointment for you, tell you about our prices or give you our address. How can I help?',
+      askService:'Great! Which service would you like? 💅',
+      prices:'Here are our prices:\n\n💅 Manicure – 18€\n🦶 Pedicure – 25€\n✨ Mani + Pedi – 38€\n💎 Gel nails – 35€\n\nWould you like to book an appointment?',
+      yesBook:'📅 Yes, book', notNow:'Not now',
+      address:'📍 We\'re at Calle de la Luna 12, Valencia.\n\n🕐 Opening hours:\nMon–Fri: 10:00–20:00\nSaturday: 10:00–15:00\nSunday: closed\n\nCan I help with anything else?',
+      goodChoice:'Good choice! Which day works for you?',
+      slots:function(d){ return 'On ' + d + ' I have these free slots:'; },
+      askName:'Perfect! To confirm the appointment, what\'s your name? ✍️',
+      nameAgain:'Could you tell me your name again, please? 🙂',
+      confirm:function(n,s,p,d,t){ return '✅ All set, ' + n + '!\n\nYour appointment:\n💅 ' + s + ' (' + p + ')\n📅 ' + d + ' at ' + t + '\n📍 Calle de la Luna 12\n\nI\'ll send you a reminder the day before. See you soon! 💖'; },
+      another:'📅 Another booking', thanksBtn:'Thanks 🙌',
+      noProblem:'No problem! Write to me whenever you like 😊',
+      thanksReply:'Thank you! 💖 Have a lovely day.',
+      welcome:'You\'re welcome! 💖 I\'m here if you need anything else.',
+      cancel:'Of course – to cancel or change your appointment, tell me your name and the date and I\'ll sort it out right away 🙂',
+      fallback:'Sorry, I didn\'t quite get that 🙈 Can I help you with one of these options?',
+      at:'at'
+    },
+    es:{
+      title:'Salón Belleza Luna – Demo bot de WhatsApp',
+      online:'en línea', typing:'escribiendo…', today:'Hoy', placeholder:'Escribe un mensaje', send:'Enviar',
+      ownerBtn:'💼 Lo que ve la dueña', ownerTitle:'Calendario del salón (Google Calendar)',
+      ownerSub:'El bot añade aquí automáticamente cada reserva confirmada. La dueña solo abre el calendario por la mañana.',
+      empty:'Todavía no hay reservas. Haz una en el chat y aparecerá aquí.',
+      demoNote:'Simulador demo · así funciona el bot en WhatsApp real',
+      client:'Cliente', via:'vía bot de WhatsApp',
+      services:[
+        {label:'Manicura – 18€', name:'Manicura', price:'18€'},
+        {label:'Pedicura – 25€', name:'Pedicura', price:'25€'},
+        {label:'Mani + Pedi – 38€', name:'Manicura + Pedicura', price:'38€'},
+        {label:'Uñas de gel – 35€', name:'Uñas de gel', price:'35€'}
+      ],
+      days:['Jueves','Viernes','Sábado'],
+      menu:['📅 Reservar cita','💅 Ver precios','📍 Dirección y horario'],
+      opening:'¡Hola! Quería información 😊',
+      greet:'¡Hola! 👋 Soy el asistente de Salón Belleza Luna.\n\nPuedo reservarte una cita, darte información sobre los precios o indicarte nuestra dirección. ¿En qué te ayudo?',
+      askService:'¡Genial! ¿Qué servicio te gustaría? 💅',
+      prices:'Estos son nuestros precios:\n\n💅 Manicura – 18€\n🦶 Pedicura – 25€\n✨ Mani + Pedi – 38€\n💎 Uñas de gel – 35€\n\n¿Quieres reservar una cita?',
+      yesBook:'📅 Sí, reservar', notNow:'Ahora no',
+      address:'📍 Estamos en Calle de la Luna 12, Valencia.\n\n🕐 Horario:\nLun–Vie: 10:00–20:00\nSábado: 10:00–15:00\nDomingo: cerrado\n\n¿Te ayudo con algo más?',
+      goodChoice:'¡Buena elección! ¿Qué día te viene bien?',
+      slots:function(d){ return 'Para el ' + d.toLowerCase() + ' tengo estos huecos libres:'; },
+      askName:'¡Perfecto! Para confirmar la cita, ¿me dices tu nombre? ✍️',
+      nameAgain:'¿Me repites tu nombre, porfa? 🙂',
+      confirm:function(n,s,p,d,t){ return '✅ ¡Listo, ' + n + '!\n\nTu cita:\n💅 ' + s + ' (' + p + ')\n📅 ' + d + ' a las ' + t + '\n📍 Calle de la Luna 12\n\nTe enviaré un recordatorio el día antes. ¡Hasta pronto! 💖'; },
+      another:'📅 Otra reserva', thanksBtn:'Gracias 🙌',
+      noProblem:'¡Sin problema! Escríbeme cuando quieras 😊',
+      thanksReply:'¡A ti! 💖 Que tengas un día precioso.',
+      welcome:'¡A ti! 💖 Aquí estoy si necesitas algo más.',
+      cancel:'Claro, para cancelar o cambiar tu cita dime tu nombre y la fecha, y lo gestiono al momento 🙂',
+      fallback:'Perdona, no te he entendido bien 🙈 ¿Te ayudo con alguna de estas opciones?',
+      at:'a las'
+    }
+  };
+  // the same time slots in both languages, keyed by day position
+  const TIMES = [['10:00','13:30','17:00'],['11:00','16:00','18:30'],['10:30','12:00']];
+
+  let L = getLang();
+  const t = () => T[L];
+
   const chat = document.getElementById('chat');
   const input = document.getElementById('input');
   const sendBtn = document.getElementById('sendBtn');
@@ -258,33 +344,15 @@
   const ownerPanel = document.getElementById('ownerPanel');
   const bookingsEl = document.getElementById('bookings');
 
-  const state = {
-    step: 'idle',          // idle | service | day | time | name
-    service: null,
-    price: null,
-    day: null,
-    time: null,
-    bookings: []
-  };
-
-  const SERVICES = [
-    {label:'Manicura — 18€', name:'Manicura', price:'18€'},
-    {label:'Pedicura — 25€', name:'Pedicura', price:'25€'},
-    {label:'Mani + Pedi — 38€', name:'Manicura + Pedicura', price:'38€'},
-    {label:'Uñas de gel — 35€', name:'Uñas de gel', price:'35€'}
-  ];
-  const DAYS = ['Jueves','Viernes','Sábado'];
-  const TIMES = {
-    'Jueves':['10:00','13:30','17:00'],
-    'Viernes':['11:00','16:00','18:30'],
-    'Sábado':['10:30','12:00']
-  };
+  let state, timers = [];
+  function later(fn, ms){ const id = setTimeout(fn, ms); timers.push(id); return id; }
 
   function now(){
     const d = new Date();
     return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
   }
   function scroll(){ chat.scrollTop = chat.scrollHeight; }
+  function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function addMsg(text, dir){
     const m = document.createElement('div');
@@ -294,13 +362,10 @@
     chat.appendChild(m);
     scroll();
   }
-  function escapeHtml(s){
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
 
   let typingEl = null;
   function showTyping(){
-    statusEl.textContent = 'escribiendo…';
+    statusEl.textContent = t().typing;
     typingEl = document.createElement('div');
     typingEl.className = 'typing';
     typingEl.innerHTML = '<span></span><span></span><span></span>';
@@ -308,13 +373,12 @@
     scroll();
   }
   function hideTyping(){
-    statusEl.textContent = 'en línea';
+    statusEl.textContent = t().online;
     if(typingEl){ typingEl.remove(); typingEl = null; }
   }
-
   function botSay(text, chips, delay){
     showTyping();
-    setTimeout(function(){
+    later(function(){
       hideTyping();
       addMsg(text, 'in');
       if(chips && chips.length){ addChips(chips); }
@@ -339,123 +403,110 @@
   function removeChips(){ if(chipsEl){ chipsEl.remove(); chipsEl = null; } }
 
   function mainMenuChips(){
-    return [
-      {label:'📅 Reservar cita', value:'__reservar'},
-      {label:'💅 Ver precios', value:'__precios'},
-      {label:'📍 Dirección y horario', value:'__direccion'}
-    ];
+    const m = t().menu;
+    return [ {label:m[0], value:'__reservar'}, {label:m[1], value:'__precios'}, {label:m[2], value:'__direccion'} ];
   }
-
   function startBooking(){
     state.step = 'service';
-    botSay('¡Genial! ¿Qué servicio te gustaría? 💅',
-      SERVICES.map(function(s){ return {label:s.label, value:'__srv:'+s.name}; }));
+    botSay(t().askService, t().services.map(function(s, i){ return {label:s.label, value:'__srv:'+i}; }));
   }
-
   function pricesMsg(){
-    botSay('Estos son nuestros precios:\n\n💅 Manicura — 18€\n🦶 Pedicura — 25€\n✨ Mani + Pedi — 38€\n💎 Uñas de gel — 35€\n\n¿Quieres reservar una cita?',
-      [{label:'📅 Sí, reservar', value:'__reservar'},{label:'Ahora no', value:'__no'}]);
+    botSay(t().prices, [{label:t().yesBook, value:'__reservar'},{label:t().notNow, value:'__no'}]);
   }
-
-  function addressMsg(){
-    botSay('📍 Estamos en Calle de la Luna 12, Valencia.\n\n🕐 Horario:\nLun–Vie: 10:00–20:00\nSábado: 10:00–15:00\nDomingo: cerrado\n\n¿Te ayudo con algo más?',
-      mainMenuChips());
-  }
+  function addressMsg(){ botSay(t().address, mainMenuChips()); }
 
   function confirmBooking(name){
-    const b = {
-      name:name, service:state.service, price:state.price,
-      day:state.day, time:state.time
-    };
-    state.bookings.push(b);
+    const srv = t().services[state.service], day = t().days[state.day];
+    state.bookings.push({ name:name, service:state.service, day:state.day, time:state.time });
     renderBookings();
-    botSay('✅ ¡Listo, ' + name + '!\n\nTu cita:\n💅 ' + state.service + ' (' + state.price + ')\n📅 ' + state.day + ' a las ' + state.time + '\n📍 Calle de la Luna 12\n\nTe enviaré un recordatorio el día antes. ¡Hasta pronto! 💖',
-      [{label:'📅 Otra reserva', value:'__reservar'},{label:'Gracias 🙌', value:'__gracias'}], 1100);
+    botSay(t().confirm(name, srv.name, srv.price, day, state.time),
+      [{label:t().another, value:'__reservar'},{label:t().thanksBtn, value:'__gracias'}], 1100);
     state.step = 'idle';
-    state.service = state.price = state.day = state.time = null;
-    // flash owner button
+    state.service = state.day = state.time = null;
     ownerToggle.style.background = '#008069';
-    setTimeout(function(){ ownerToggle.style.background = '#111B21'; }, 1600);
+    later(function(){ ownerToggle.style.background = '#111B21'; }, 1600);
   }
 
   function renderBookings(){
     if(!state.bookings.length){
-      bookingsEl.innerHTML = '<div class="empty">Пока нет записей. Сделай бронь в чате — и она появится здесь.</div>';
+      bookingsEl.innerHTML = '<div class="empty">' + t().empty + '</div>';
       return;
     }
     bookingsEl.innerHTML = state.bookings.map(function(b){
-      return '<div class="booking"><b>' + b.day + ' ' + b.time + '</b> — ' + b.service +
-        ' (' + b.price + ')<br>Cliente: ' + escapeHtml(b.name) + ' · vía WhatsApp bot 🤖</div>';
+      const srv = t().services[b.service];
+      return '<div class="booking"><b>' + t().days[b.day] + ' ' + b.time + '</b> – ' + srv.name +
+        ' (' + srv.price + ')<br>' + t().client + ': ' + escapeHtml(b.name) + ' · ' + t().via + ' 🤖</div>';
     }).join('');
   }
 
-  function fallback(){
-    botSay('Perdona, no te he entendido bien 🙈 ¿Te ayudo con alguna de estas opciones?', mainMenuChips());
-  }
+  function fallback(){ botSay(t().fallback, mainMenuChips()); }
 
   function handleFreeText(text){
-    const t = text.toLowerCase();
-    if(/(hola|buenas|hey|hi)/.test(t)){ greet(); return; }
-    if(/(reserv|cita|hueco|apunt)/.test(t)){ startBooking(); return; }
-    if(/(precio|cuánto|cuanto|tarifa|coste|vale)/.test(t)){ pricesMsg(); return; }
-    if(/(direcci|dónde|donde|horario|abr|ubicaci)/.test(t)){ addressMsg(); return; }
-    if(/(gracias|perfecto|vale|ok|genial)/.test(t)){
-      botSay('¡A ti! 💖 Aquí estoy si necesitas algo más.', mainMenuChips());
-      return;
-    }
-    if(/(cancel|anular)/.test(t)){
-      botSay('Claro, para cancelar o cambiar tu cita dime tu nombre y la fecha, y lo gestiono al momento 🙂');
-      return;
-    }
+    const s = text.toLowerCase();
+    if(/(hola|buenas|hey|hi\b|hello)/.test(s)){ greet(); return; }
+    if(/(reserv|cita|hueco|apunt|book|appointment|slot)/.test(s)){ startBooking(); return; }
+    if(/(precio|cuánto|cuanto|tarifa|coste|price|cost|how much)/.test(s)){ pricesMsg(); return; }
+    if(/(direcci|dónde|donde|horario|abr|ubicaci|address|where|hours|open)/.test(s)){ addressMsg(); return; }
+    if(/(gracias|perfecto|vale|ok|genial|thank|great|perfect)/.test(s)){ botSay(t().welcome, mainMenuChips()); return; }
+    if(/(cancel|anular|change|cambiar)/.test(s)){ botSay(t().cancel); return; }
     fallback();
   }
 
   function handleUser(value, label){
     removeChips();
     addMsg(label || value, 'out');
-
-    // command chips
     if(value === '__reservar'){ startBooking(); return; }
     if(value === '__precios'){ pricesMsg(); return; }
     if(value === '__direccion'){ addressMsg(); return; }
-    if(value === '__no'){ botSay('¡Sin problema! Escríbeme cuando quieras 😊', mainMenuChips()); return; }
-    if(value === '__gracias'){ botSay('¡A ti! 💖 Que tengas un día precioso.', mainMenuChips()); return; }
+    if(value === '__no'){ botSay(t().noProblem, mainMenuChips()); return; }
+    if(value === '__gracias'){ botSay(t().thanksReply, mainMenuChips()); return; }
     if(value.indexOf('__srv:') === 0){
-      const srvName = value.slice(6);
-      const srv = SERVICES.find(function(s){ return s.name === srvName; });
-      state.service = srv.name; state.price = srv.price;
+      state.service = +value.slice(6);
       state.step = 'day';
-      botSay('¡Buena elección! ¿Qué día te viene bien?',
-        DAYS.map(function(d){ return {label:'📅 ' + d, value:'__day:'+d}; }));
+      botSay(t().goodChoice, t().days.map(function(d, i){ return {label:'📅 ' + d, value:'__day:'+i}; }));
       return;
     }
     if(value.indexOf('__day:') === 0){
-      state.day = value.slice(6);
+      state.day = +value.slice(6);
       state.step = 'time';
-      botSay('Para el ' + state.day.toLowerCase() + ' tengo estos huecos libres:',
-        TIMES[state.day].map(function(t){ return {label:'🕐 ' + t, value:'__time:'+t}; }));
+      botSay(t().slots(t().days[state.day]), TIMES[state.day].map(function(x){ return {label:'🕐 ' + x, value:'__time:'+x}; }));
       return;
     }
     if(value.indexOf('__time:') === 0){
       state.time = value.slice(7);
       state.step = 'name';
-      botSay('¡Perfecto! Para confirmar la cita, ¿me dices tu nombre? ✍️');
+      botSay(t().askName);
       return;
     }
-
-    // free text depending on step
     if(state.step === 'name'){
       const name = value.trim();
-      if(name.length < 2){ botSay('¿Me repites tu nombre, porfa? 🙂'); return; }
+      if(name.length < 2){ botSay(t().nameAgain); return; }
       confirmBooking(name.charAt(0).toUpperCase() + name.slice(1));
       return;
     }
     handleFreeText(value);
   }
 
-  function greet(){
-    botSay('¡Hola! 👋 Soy el asistente de Salón Belleza Luna.\n\nPuedo reservarte una cita, darte información sobre los precios o indicarte nuestra dirección. ¿En qué te ayudo?',
-      mainMenuChips(), 700);
+  function greet(){ botSay(t().greet, mainMenuChips(), 700); }
+
+  // static texts + a fresh conversation in the current language
+  function start(){
+    timers.forEach(clearTimeout); timers = [];
+    typingEl = null; chipsEl = null;
+    state = { step:'idle', service:null, day:null, time:null, bookings:[] };
+    document.documentElement.lang = L;
+    document.title = t().title;
+    statusEl.textContent = t().online;
+    ownerToggle.textContent = t().ownerBtn;
+    document.getElementById('ownerTitle').textContent = t().ownerTitle;
+    document.getElementById('ownerSub').textContent = t().ownerSub;
+    document.getElementById('demoNote').textContent = t().demoNote;
+    input.placeholder = t().placeholder;
+    sendBtn.setAttribute('aria-label', t().send);
+    document.querySelectorAll('.lang button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-l') === L); });
+    renderBookings();
+    chat.innerHTML = '<div class="day-pill">' + t().today + '</div>';
+    later(function(){ addMsg(t().opening, 'out'); greet(); }, 600);
   }
 
   sendBtn.addEventListener('click', function(){
@@ -464,24 +515,21 @@
     input.value = '';
     handleUser(v);
   });
-  input.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){ sendBtn.click(); }
-  });
-  ownerToggle.addEventListener('click', function(){
-    ownerPanel.classList.toggle('open');
-  });
+  input.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ sendBtn.click(); } });
+  ownerToggle.addEventListener('click', function(){ ownerPanel.classList.toggle('open'); });
   document.addEventListener('click', function(e){
-    if(ownerPanel.classList.contains('open') &&
-       !ownerPanel.contains(e.target) && e.target !== ownerToggle){
+    if(ownerPanel.classList.contains('open') && !ownerPanel.contains(e.target) && e.target !== ownerToggle){
       ownerPanel.classList.remove('open');
     }
   });
+  document.querySelectorAll('.lang button').forEach(function(b){
+    b.addEventListener('click', function(){
+      const l = b.getAttribute('data-l'); if(l === L) return;
+      L = l; putLang(L); start();
+    });
+  });
 
-  // opening sequence
-  setTimeout(function(){
-    addMsg('Hola! Quería información 😊', 'out');
-    greet();
-  }, 600);
+  start();
 })();
 </script>
 </body>
