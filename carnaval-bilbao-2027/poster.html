@@ -1,0 +1,101 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Inter:wght@600;800&display=block" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#111}
+  svg{display:block;width:100vw;height:auto}
+  .big{font-family:'Big Shoulders Display';font-weight:900}
+  .sm{font-family:'Inter';font-weight:800}
+</style></head>
+<body>
+<svg viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="head"><circle cx="250" cy="300" r="150"/></clipPath>
+    <pattern id="stripes" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="12" height="12" fill="#FFD23F"/><rect width="6" height="12" fill="#FF3D7F"/>
+    </pattern>
+    <pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#2EC4B6"/><circle cx="5" cy="5" r="2.2" fill="#14127A"/>
+    </pattern>
+  </defs>
+
+  <!-- background -->
+  <rect width="500" height="700" fill="#FF5A1F"/>
+  <!-- sunburst rays -->
+  <g transform="translate(250 300)" opacity=".22">
+    <g id="rays" fill="#FFD23F">
+      <path d="M0 0 L-14 -520 L14 -520Z"/>
+    </g>
+  </g>
+  <g transform="translate(250 300)" fill="#FFD23F" opacity=".22" id="rayset"></g>
+
+  <!-- ría: serpentine streamers crossing the poster -->
+  <path d="M-20 455 C 80 395, 160 535, 260 475 S 430 405, 520 455" fill="none" stroke="#14127A" stroke-width="18" stroke-linecap="round"/>
+  <path d="M-20 483 C 80 423, 160 563, 260 503 S 430 433, 520 483" fill="none" stroke="#2EC4B6" stroke-width="7" stroke-linecap="round"/>
+  <path d="M-30 110 C 60 60, 120 170, 210 120" fill="none" stroke="#FF3D7F" stroke-width="7" stroke-linecap="round"/>
+  <path d="M300 95 C 360 40, 430 140, 530 70" fill="none" stroke="#2EC4B6" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- HEAD: circle split in four colour fields -->
+  <g clip-path="url(#head)">
+    <rect x="100" y="150" width="150" height="300" fill="#FFD23F"/>
+    <rect x="250" y="150" width="150" height="300" fill="#FF3D7F"/>
+    <rect x="100" y="420" width="150" height="40" fill="url(#dots)"/>
+    <rect x="250" y="420" width="150" height="40" fill="url(#stripes)"/>
+    <!-- cheeks -->
+    <circle cx="170" cy="345" r="18" fill="#FF5A1F"/>
+    <circle cx="330" cy="345" r="18" fill="#FFD23F"/>
+  </g>
+
+  <!-- HAT: stacked triangles / gorro de papel -->
+  <path d="M160 175 L250 20 L340 175 Z" fill="#14127A"/>
+  <path d="M190 124 L250 20 L310 124 Z" fill="#2EC4B6"/>
+  <path d="M220 72 L250 20 L280 72 Z" fill="#FFF4E0"/>
+  <circle cx="250" cy="18" r="14" fill="#FF3D7F"/>
+  <path d="M150 178 Q250 150 350 178 L350 196 Q250 168 150 196Z" fill="#FFF4E0"/>
+
+  <!-- MASK band -->
+  <path d="M78 262 C 120 220, 200 238, 250 262 C 300 238, 380 220, 422 262
+           C 410 312, 330 330, 250 300 C 170 330, 90 312, 78 262 Z" fill="#14127A"/>
+  <!-- eye holes: star & circle (two different eyes, two different looks) -->
+  <path transform="translate(185 274)" d="M0 -26 L7 -8 L26 -8 L11 4 L16 23 L0 12 L-16 23 L-11 4 L-26 -8 L-7 -8Z" fill="#FFF4E0"/>
+  <circle cx="185" cy="277" r="6" fill="#14127A"/>
+  <circle cx="315" cy="274" r="23" fill="#FFF4E0"/>
+  <circle cx="315" cy="277" r="9" fill="#14127A"/>
+  <circle cx="319" cy="272" r="3" fill="#FFF4E0"/>
+  <!-- mask stick -->
+  <rect x="414" y="268" width="8" height="140" rx="4" transform="rotate(18 418 268)" fill="#FFF4E0"/>
+
+  <!-- MOUTH: big open laugh -->
+  <path d="M200 362 Q250 418 300 362 Z" fill="#14127A"/>
+  <path d="M218 384 Q250 402 282 384 Q250 414 218 384Z" fill="#FF5A1F"/>
+
+  <!-- confetti -->
+  <g id="confetti"></g>
+
+  <!-- TYPOGRAPHY -->
+  <rect x="140" y="492" width="220" height="34" rx="17" fill="#14127A"/>
+  <text x="250" y="518" text-anchor="middle" class="big" font-size="27" fill="#FFD23F" textLength="180" lengthAdjust="spacing">BILBAO 2027</text>
+  <text x="250" y="618" text-anchor="middle" class="big" font-size="104" fill="#FFF4E0" letter-spacing="1" textLength="440" lengthAdjust="spacingAndGlyphs">ARATUSTEAK</text>
+  <text x="250" y="652" text-anchor="middle" class="big" font-size="38" fill="#14127A" letter-spacing="10">CARNAVALES</text>
+  <rect x="30" y="668" width="440" height="2" fill="#14127A"/>
+  <text x="30" y="688" class="sm" font-size="11.5" fill="#14127A" letter-spacing="1.5">OTSAILAK 4–9 FEBRERO</text>
+  <text x="470" y="688" text-anchor="end" class="sm" font-size="11.5" fill="#14127A" letter-spacing="1.5">BILBO · BILBAO</text>
+</svg>
+<script>
+  // sunburst
+  const rs=document.getElementById('rayset');
+  for(let i=0;i<24;i++){const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M0 0 L-22 -560 L22 -560Z');p.setAttribute('transform',`rotate(${i*15})`);rs.appendChild(p);}
+  document.getElementById('rays').remove();
+  // deterministic confetti
+  let s=7;const r=()=>(s=(s*9301+49297)%233280)/233280;
+  const cols=['#FFD23F','#FF3D7F','#2EC4B6','#FFF4E0','#14127A'];
+  const g=document.getElementById('confetti');let n=0;
+  while(n<70){const x=r()*500,y=r()*480+10;
+    const dx=x-250,dy=y-300; if(Math.hypot(dx,dy)<165) continue; if(y<185&&Math.abs(dx)<110) continue;
+    const c=cols[Math.floor(r()*cols.length)];let e;
+    if(r()<.5){e=document.createElementNS('http://www.w3.org/2000/svg','circle');e.setAttribute('cx',x);e.setAttribute('cy',y);e.setAttribute('r',2+r()*4);}
+    else{e=document.createElementNS('http://www.w3.org/2000/svg','rect');e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('width',3+r()*4);e.setAttribute('height',9+r()*6);e.setAttribute('transform',`rotate(${r()*180} ${x} ${y})`);}
+    e.setAttribute('fill',c);g.appendChild(e);n++;}
+</script>
+</body></html>
